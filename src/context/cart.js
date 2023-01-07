@@ -19,7 +19,7 @@ function reducer(items, action) {
               }
             : item
         )
-      : [...items, {...action.item, quantity: 1, price: 5000 }];
+      : [...items, { ...action.item, quantity: 1, price: 5000 }];
   } else if (action.type === "DECREMENT") {
     return items.find((item) => item.title === action.item.title)?.quantity ===
       1
@@ -41,11 +41,12 @@ function reducer(items, action) {
 
 export const CartContext = createContext();
 
-const recovery = new Array() ;
+const recovery = [];
 const CartProvider = ({ children }) => {
   const [items, dispatch] = useReducer(reducer, recovery);
 
   useEffect(() => {
+    if (JSON.parse(localStorage.getItem("items")) === null) return;
     dispatch({
       type: "RECOVER",
       item: JSON.parse(localStorage.getItem("items")),
