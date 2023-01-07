@@ -2,7 +2,6 @@ import React, { createContext, useEffect, useReducer, useState } from "react";
 
 export const MAX_AMOUNT_PER_ITEM = 5;
 
-const defaults = { alma: 123 };
 function reducer(items, action) {
   if (action.type === "RECOVER") {
     return action.item;
@@ -10,10 +9,17 @@ function reducer(items, action) {
     return items.find((item) => item.id === action.item.id)
       ? items.map((item) =>
           item.title === action.item.title
-            ? { ...item, quantity: item.quantity + 1, price: Math.floor((5000 * (item.quantity + 1) - (item.quantity) * 1000) / (item.quantity + 1)) }
+            ? {
+                ...item,
+                quantity: item.quantity + 1,
+                price: Math.floor(
+                  (5000 * (item.quantity + 1) - item.quantity * 1000) /
+                    (item.quantity + 1)
+                ),
+              }
             : item
         )
-      : [...items, { ...defaults, ...action.item, quantity: 1, price: 5000 }];
+      : [...items, {...action.item, quantity: 1, price: 5000 }];
   } else if (action.type === "DECREMENT") {
     return items.find((item) => item.title === action.item.title)?.quantity ===
       1
@@ -35,7 +41,7 @@ function reducer(items, action) {
 
 export const CartContext = createContext();
 
-const recovery = []
+const recovery = [];
 const CartProvider = ({ children }) => {
   const [items, dispatch] = useReducer(reducer, recovery);
 

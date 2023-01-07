@@ -14,6 +14,12 @@ const Checkout = async (req, res) => {
         name: item.title,
         images: [item.image],
         description: `By ${item.artist}`,
+        metadata: {
+          title: item.title,
+          artist: item.artist,
+          url: item.url,
+          image: item.image,
+        },
       },
       unit_amount: item.price * 100,
     },
@@ -24,24 +30,11 @@ const Checkout = async (req, res) => {
     shipping_address_collection: {
       allowed_countries: ["HU"],
     },
-    // shipping_options: [
-    //   {
-    //     shipping_rate_data: {
-    //       type: "fixed_amount",
-    //       fixed_amount: { amount: 0, currency: "huf" },
-    //       display_name: "Free shipping",
-    //       delivery_estimate: {
-    //         minimum: { unit: "business_day", value: 5 },
-    //         maximum: { unit: "business_day", value: 7 },
-    //       },
-    //     },
-    //   },
-    // ],
     locale: "hu",
     allow_promotion_codes: true,
     line_items: trans,
     mode: "payment",
-    success_url: `${req.headers.origin}/cart`,
+    success_url: `${req.headers.origin}/success`,
     cancel_url: `${req.headers.origin}/cart`,
   });
   res.status(200).json(session.url);
