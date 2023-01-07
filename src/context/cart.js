@@ -41,7 +41,7 @@ function reducer(items, action) {
 
 export const CartContext = createContext();
 
-const recovery = [];
+const recovery = new Array() ;
 const CartProvider = ({ children }) => {
   const [items, dispatch] = useReducer(reducer, recovery);
 
