@@ -3,12 +3,12 @@ export default function Home() {
     title: "Starboy",
     artist: "The Weekend",
     image: "https://m.media-amazon.com/images/I/819e05qxPEL.jpg",
-    quantity: 4,
+    quantity: 2,
     price: 5000,
     subval: 500,
   };
 
-  console.log((example.price * example.quantity - (example.quantity-1) * 2000) / example.quantity);
+  console.log((5000 * example.quantity - (example.quantity-1) * 2000) / example.quantity);
 
   return <div>alma</div>;
 }

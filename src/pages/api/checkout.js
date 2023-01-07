@@ -11,9 +11,9 @@ const Checkout = async (req, res) => {
     price_data: {
       currency: "huf",
       product_data: {
-        name: item.name,
+        name: item.title,
         images: [item.image],
-        description: `By ${item.description}`,
+        description: `By ${item.artist}`,
       },
       unit_amount: item.price * 100,
     },
@@ -21,7 +21,22 @@ const Checkout = async (req, res) => {
   }));
 
   const session = await stripe.checkout.sessions.create({
-    
+    shipping_address_collection: {
+      allowed_countries: ["HU"],
+    },
+    // shipping_options: [
+    //   {
+    //     shipping_rate_data: {
+    //       type: "fixed_amount",
+    //       fixed_amount: { amount: 0, currency: "huf" },
+    //       display_name: "Free shipping",
+    //       delivery_estimate: {
+    //         minimum: { unit: "business_day", value: 5 },
+    //         maximum: { unit: "business_day", value: 7 },
+    //       },
+    //     },
+    //   },
+    // ],
     locale: "hu",
     allow_promotion_codes: true,
     line_items: trans,
