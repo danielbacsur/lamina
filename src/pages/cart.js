@@ -8,18 +8,16 @@ const Cart = () => {
   const router = useRouter();
   const { items, dispatch } = useContext(CartContext);
 
-  const defaults = [
-    {
-      title: "Starboy",
-      url: "https://open.spotify.com/track/7MXVkk9YMctZqd1Srtv4MB",
-      image: "https://m.media-amazon.com/images/I/819e05qxPEL.jpg",
-    },
-    {
-      title: "Redbone",
-      url: "https://open.spotify.com/track/0WtDGnWL2KrMCk0mI1Gpwz",
-      image: "https://m.media-amazon.com/images/I/81aYuDTpo3L.jpg",
-    },
-  ];
+  useEffect(() => {
+    const hash = window.location.hash
+
+    if(hash) {
+      console.log(hash)
+      const token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+      window.location.hash = ""
+      window.localStorage.setItem("spotify", token)
+    }
+  }, [])
 
   const append = (item) => {
     dispatch({ type: "APPEND", item });
@@ -28,8 +26,7 @@ const Cart = () => {
     dispatch({ type: "DECREMENT", item });
   };
 
-  const checkout = async (e) => {
-    e.preventDefault();
+  const checkout = async () => {
     const { data } = await axios.post("/api/checkout", {
       items,
     });
@@ -43,19 +40,6 @@ const Cart = () => {
 
   return (
     <>
-      <form onSubmit={checkout}>
-        <button type="submit">Checkout</button>
-      </form>
-      <br />
-      <button
-        onClick={() => {
-          append(defaults[0]);
-          append(defaults[1]);
-        }}
-      >
-        Append
-      </button>
-
       <div className="container max-w-lg mx-auto flex flex-col space-y-8">
         {items.map((item) => (
           <div className="flex items-center justify-between space-x-8">
@@ -65,7 +49,7 @@ const Cart = () => {
             />
             <div className="flex-auto flex flex-col">
               <span className="font-serif text-lg">{item.title}</span>
-              <span className="text-sm">{getType(item.url)}</span>
+              <span className="text-sm text-gray-400">{item.platform} {getType(item.url)}</span>
             </div>
             <div className="w-20 flex justify-between space-x-4">
               <button onClick={() => decrement(item)}>-</button>
@@ -80,6 +64,8 @@ const Cart = () => {
         >
           +
         </button>
+        <button onClick={checkout}>Checkout</button>
+
       </div>
     </>
   );

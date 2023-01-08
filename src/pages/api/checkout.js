@@ -14,7 +14,7 @@ const Checkout = async (req, res) => {
       product_data: {
         name: item.title,
         images: [item.image],
-        description: getType(item.url),
+        description: `${item.platform} ${getType(item.url)}`,
         metadata: {
           title: item.title,
           url: item.url,
