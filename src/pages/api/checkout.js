@@ -38,7 +38,7 @@ const Checkout = async (req, res) => {
     line_items: trans,
     mode: "payment",
     success_url: `${req.headers.origin}/success`,
-    cancel_url: `${req.headers.origin}/cart`,
+    cancel_url: `${req.headers.origin}/manage`,
   });
   res.status(200).json(session.url);
 };

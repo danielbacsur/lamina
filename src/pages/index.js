@@ -29,8 +29,8 @@ const Index = () => {
           <Images />
         </div>
       </div>
-      <div className="flex-1 flex-col md:flex-row container max-w-screen-lg flex justify-between items-center px-8 py-16 space-y-8 md:space-y-0">
-        <div className="flex flex-col max-w-lg space-y-4 items-center md:items-start">
+      <div className="flex-1 flex-col lg:flex-row container max-w-screen-lg flex justify-between items-center px-8 py-16 space-y-8 lg:space-y-0">
+        <div className="flex flex-col max-w-lg space-y-4 items-center lg:items-start">
           <span className="font-serif text-4xl text-center">NFC Album Coverek</span>
           <p>
             Lorem Ipsum is simply dummy text of the printing and typesetting

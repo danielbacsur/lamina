@@ -29,7 +29,7 @@ const Index = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col md:flex-row">
+    <div className="w-screen h-screen flex flex-col lg:flex-row">
       <div className="flex-1 grid place-items-center p-8">
         <span className="font-serif text-2xl text-center">
           Válassz platformot a folytatáshoz.
@@ -43,7 +43,7 @@ const Index = () => {
           >
             Spotify
           </button>
-          <button
+          {/* <button
             className="h-12 px-8 font-serif text-white bg-black rounded-full"
             onClick={spotifyOAuth}
           >
@@ -54,7 +54,7 @@ const Index = () => {
             onClick={spotifyOAuth}
           >
             SoundCloud
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
