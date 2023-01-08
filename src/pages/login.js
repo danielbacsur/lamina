@@ -20,7 +20,7 @@ const Index = () => {
       window.localStorage.setItem("spotify", token);
     }
 
-    if (spotify) router.push("/cart");
+    if (spotify) router.push("/manage");
   }, []);
 
   const spotifyOAuth = async () => {
