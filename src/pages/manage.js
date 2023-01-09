@@ -87,6 +87,24 @@ const Customize = () => {
     router.push(`#${i}`);
   };
 
+  const search = () => {};
+
+  // useEffect(() => {
+  //   const token = window.localStorage.getItem("spotify");
+  //   console.log(token);
+  //   const { data } = axios.get("https://api.spotify.com/v1/search", {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     params: {
+  //       q: "Drake",
+  //       type: "artist"
+  //     },
+  //   });
+  //   console.log(data)
+  // }, []);
+
+
   const [state, setState] = useState("DEFAULT");
 
   return (
@@ -104,11 +122,11 @@ const Customize = () => {
               <div className="w-full h-full grid place-items-center">
                 <div className="relative flex items-center">
                   <img
-                    className="absolute -top-[4vw] lg:top-0 left-0 lg:-left-[4vw] -z-10 animate-spin"
-                    src="record.png"
+                    className="absolute -top-[5vh] lg:top-0 left-0 lg:-left-[5vh] animate-spin"
+                    src="/record.png"
                   />
                   <div
-                    className="w-[10vh] lg:w-[25vh] aspect-square rounded-[12px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)] group bg-cover hover:scale-105 transition-all duration-300"
+                    className="w-[10vh] lg:w-[25vh] aspect-square rounded-[12px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)] z-10 group bg-cover hover:scale-105 transition-all duration-300"
                     style={{ backgroundImage: `url(${item.image})` }}
                   ></div>
                 </div>
