@@ -36,6 +36,7 @@ const Checkout = async (req, res) => {
     locale: "hu",
     allow_promotion_codes: true,
     line_items: trans,
+    metadata: { items: JSON.stringify(items) },
     mode: "payment",
     success_url: `${req.headers.origin}/success`,
     cancel_url: `${req.headers.origin}/manage`,

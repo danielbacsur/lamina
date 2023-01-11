@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useRouter } from "next/router";
 
 const Index = () => {
@@ -47,22 +46,6 @@ const Index = () => {
           </button>
       </div>
     </div>
-    // <div className="min-w-screen min-h-screen flex flex-col items-center justify-center space-y-4 overflow-hidden">
-    //   {/* <div className="flex-1 grid place-items-center">
-    //     <span className="text-6xl font-serif tracking-[5vw]">LAMINA</span>
-    //   </div> */}
-    //   <div className="flex-1 flex justify-center bg-red-300">
-    //     <div class="relative flex space-x-4">
-    //       <div class="animate-marquee whitespace-nowrap flex space-x-4">
-    //         <Images />
-    //       </div>
-    //       <div class="animate-marquee2 whitespace-nowrap flex space-x-4 absolute top-0">
-    //         <Images />
-    //       </div>
-    //     </div>
-    //   </div>
-    //   <div className="flex-1 bg-red-500"></div>
-    // </div>
   );
 };
 

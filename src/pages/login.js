@@ -6,21 +6,34 @@ const Index = () => {
   const router = useRouter();
 
   useEffect(() => {
+    const date = new Date();
     const hash = window.location.hash;
-    const spotify = window.localStorage.getItem("spotify");
-
+    const spotify = JSON.parse(window.localStorage.getItem("spotify"));
+    console.log(spotify);
     if (hash) {
-      console.log(hash);
       const token = hash
         .substring(1)
         .split("&")
         .find((elem) => elem.startsWith("access_token"))
         .split("=")[1];
-      window.location.hash = "";
-      window.localStorage.setItem("spotify", token);
-    }
+      const expiration = hash
+        .substring(1)
+        .split("&")
+        .find((elem) => elem.startsWith("expires_in"))
+        .split("=")[1];
 
-    if (spotify) router.push("/manage");
+      window.location.hash = "";
+      window.localStorage.setItem(
+        "spotify",
+        JSON.stringify({
+          token,
+          expiration: parseInt(expiration) * 1000 + date.getTime(),
+        })
+      );
+    }
+    console.log(spotify);
+    console.log(spotify.expiration > date.getTime());
+    if (spotify && spotify.expiration > date.getTime()) router.push("/manage");
   }, []);
 
   const spotifyOAuth = async () => {

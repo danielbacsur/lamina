@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CartContext } from "context";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { getType, getUUID } from "utils";
 
 const Customize = () => {
@@ -87,23 +87,34 @@ const Customize = () => {
     router.push(`#${i}`);
   };
 
-  const search = () => {};
+  const [token, setToken] = useState("");
+  const [searchJSON, setSearchJSON] = useState([]);
+  const searchArtists = async (word) => {
+    try {
+      const { data } = await axios.get("https://api.spotify.com/v1/search", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          q: word,
+          type: "track,artist,album,playlist",
+          limit: 1,
+        },
+      });
+      setSearchJSON({
+        tracks: data.tracks,
+        albums: data.albums,
+        playlists: data.playlists,
+        artists: data.artists,
+      });
+    } catch {
+      console.log("error");
+    }
+  };
 
-  // useEffect(() => {
-  //   const token = window.localStorage.getItem("spotify");
-  //   console.log(token);
-  //   const { data } = axios.get("https://api.spotify.com/v1/search", {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     params: {
-  //       q: "Drake",
-  //       type: "artist"
-  //     },
-  //   });
-  //   console.log(data)
-  // }, []);
-
+  useEffect(() => {
+    setToken(JSON.parse(window.localStorage.getItem("spotify")).token);
+  }, []);
 
   const [state, setState] = useState("DEFAULT");
 
@@ -197,6 +208,7 @@ const Customize = () => {
                 </button>
               )}
             </div>
+            <button onClick={() => setState("SEARCH")}>search</button>
           </div>
         )}
         {state === "CUSTOMIZE" && (
@@ -227,6 +239,44 @@ const Customize = () => {
               >
                 Hozzáadás
               </button>
+            </div>
+          </form>
+        )}
+        {state === "SEARCH" && (
+          <form className="w-full">
+            <input
+              className="border border-black text-center"
+              type="text"
+              onChange={(e) => {
+                searchArtists(e.target.value);
+              }}
+            />
+            <div className="flex flex-col gap-4">
+              {Object.keys(searchJSON).map((key) => {
+                const uri = searchJSON[key].items[0].uri
+                  .substring(8)
+                  .replace(":", "/");
+
+                return (
+                  <div
+                    className="flex items-center justify-between gap-8"
+                    key={key}
+                  >
+                    {/* th-[152px] */}
+                    {uri}
+                    <iframe
+                      className="flex-grow h-[80px] rounded-[12px] shadow-lg"
+                      src={`https://open.spotify.com/embed/${uri}`}
+                      allowFullScreen=""
+                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                      loading="lazy"
+                    />
+                    <button className="flex-none h-[80px] rounded-[12px] aspect-square shadow-lg">
+                      +
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </form>
         )}
