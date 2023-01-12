@@ -31,9 +31,7 @@ const Index = () => {
         })
       );
     }
-    console.log(spotify);
-    console.log(spotify.expiration > date.getTime());
-    if (spotify && spotify.expiration > date.getTime()) router.push("/manage");
+    if (spotify?.expiration > date.getTime()) router.push("/manage");
   }, []);
 
   const spotifyOAuth = async () => {

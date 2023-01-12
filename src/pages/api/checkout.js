@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { getType, getUUID } from "utils";
+import { translateType } from "utils";
 
 const stripe = new Stripe(
   "sk_test_51MNIXiFHXQAurXSs0A7uZKkQvKArBxCwOhN9F0eWJbBJ0gagRNrkgXbWtOlw6ig2EVoF4CLMMgp5XFCkR7LdJeAo00dRO8v59g"
@@ -14,14 +14,12 @@ const Checkout = async (req, res) => {
       product_data: {
         name: item.title,
         images: [item.image],
-        description: `${item.platform} ${getType(item.url)}`,
+        description: translateType(item.type),
         metadata: {
-          title: item.title,
           url: item.url,
+          title: item.title,
           image: item.image,
-          platform: item.platform,
           type: item.type,
-          uuid: item.uuid,
         },
       },
       unit_amount: item.price * 100,
