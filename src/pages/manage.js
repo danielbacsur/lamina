@@ -4,6 +4,16 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
 import { getType, getUUID, translateType } from "utils";
 
+const IFrame = ({ tag }) => (
+  <iframe
+    className="flex-grow h-[80px] rounded-[12px] shadow-lg"
+    src={`https://open.spotify.com/embed/${tag}`}
+    allowFullScreen=""
+    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    loading="lazy"
+  />
+);
+
 const Customize = () => {
   const { items, dispatch } = useContext(CartContext);
   const router = useRouter();
@@ -87,6 +97,7 @@ const Customize = () => {
 
   useEffect(() => {
     checkSpotify();
+    searchArtists("The Weekend Starboy")
   }, []);
   useEffect(() => {
     const wrapper = document.getElementById("wrapper");
@@ -151,64 +162,62 @@ const Customize = () => {
               </div> */}
             </div>
           ))}
-          {Object.keys(items).length === 0 && (
+          {/* {Object.keys(items).length === 0 && (
             <div className="w-full h-full grid place-items-center">
               <span className="font-serif md:text-2xl text-center">
                 Nincsenek termékek a kosaradban
               </span>
             </div>
-          )}
+          )} */}
         </div>
       </div>
-      <div className="flex-[5_5_0%] lg:flex-1 grid place-items-center p-8 shadow-[15px_0_30px_0_rgba(0,0,0,0.18)]">
+      <div className="flex-[5_5_0%] lg:flex-1 grid place-items-center p-8 shadow-[15px_0_30px_0_rgba(0,0,0,0.18)] overflow-y-auto">
         {state === "DEFAULT" && (
-          <div className="w-full flex flex-col gap-8 max-w-sm">
-            {Object.keys(items).length > 0 && (
-              <div className="flex flex-col gap-4">
-                {items.map((item, i) => (
-                  <div className="flex items-center justify-between gap-8 px-4">
+          <form className="w-full flex flex-col gap-8">
+            <button
+              className="h-12 rounded-[12px] text-white bg-black"
+              onClick={() => setState("SEARCH")}
+            >
+              Lemez hozzáadása
+            </button>
+            <div className="flex flex-col gap-4">
+              {items.map((item) => {
+                const tag = item.url.split("open.spotify.com")[1].substring(1);
+                return (
+                  <div
+                    className="flex items-center justify-between gap-4"
+                    key={item.url}
+                  >
+                    <IFrame tag={tag} />
                     <button
-                      className={`capitalize ${
-                        i === index ? "underline font-medium" : ""
-                      }`}
-                      onClick={() => focus(i)}
+                      className="flex-none h-[80px] rounded-[12px] aspect-square shadow-lg"
+                      onClick={() => decrement(item)}
+                      type="button"
                     >
-                      {item.title} ({translateType(item.type)})
+                      -
                     </button>
-                    <div className="w-[20%] flex justify-between">
-                      <button onClick={() => decrement(item)}>-</button>
-
-                      <span>{item.quantity}</span>
-                      <button onClick={() => append(item)}>+</button>
-                    </div>
                   </div>
-                ))}
-              </div>
-            )}
-            {Object.keys(items).length > 0 && <span className="border-b" />}
-            <div className="flex justify-between gap-8 flex-col md:flex-row">
-              <button
-                className="md:flex-1 h-12 rounded-full text-white bg-black"
-                onClick={() => setState("SEARCH")}
-              >
-                Lemez Hozzáadása
-              </button>
-              {Object.keys(items).length > 0 && (
-                <button
-                  className="md:flex-1 h-12 rounded-full text-white bg-black"
-                  onClick={checkout}
-                  disabled={Object.keys(items).length === 0}
-                >
-                  Fizetés
-                </button>
+                );
+              })}
+              {items.length === 0 && (
+                <span className="shadow-lg h-[80px] rounded-[12px] grid place-items-center">
+                  A kosarad üres
+                </span>
               )}
             </div>
-          </div>
+
+            <button
+              className="h-12 rounded-[12px] text-white bg-black"
+              onClick={checkout}
+            >
+              Fizetés
+            </button>
+          </form>
         )}
         {state === "SEARCH" && (
-          <form className="w-full">
+          <form className="w-full flex flex-col gap-8">
             <input
-              className="border border-black text-center"
+              className="w-full h-12 rounded-[12px] border border-black shadow-lg text-center"
               type="text"
               onChange={(e) => {
                 searchArtists(e.target.value);
@@ -223,17 +232,10 @@ const Customize = () => {
 
                 return (
                   <div
-                    className="flex items-center justify-between gap-8"
+                    className="flex items-center justify-between gap-4"
                     key={key}
                   >
-                    {/* th-[152px] */}
-                    <iframe
-                      className="flex-grow h-[80px] rounded-[12px] shadow-lg"
-                      src={`https://open.spotify.com/embed/${suri}`}
-                      allowFullScreen=""
-                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                      loading="lazy"
-                    />
+                    <IFrame tag={suri} />
                     <button
                       className="flex-none h-[80px] rounded-[12px] aspect-square shadow-lg"
                       onClick={() => addFinal(url)}
@@ -245,6 +247,12 @@ const Customize = () => {
                 );
               })}
             </div>
+            <button
+              className="h-12 rounded-[12px] text-white bg-black"
+              onClick={() => setState("DEFAULT")}
+            >
+              Vissza
+            </button>
           </form>
         )}
       </div>
