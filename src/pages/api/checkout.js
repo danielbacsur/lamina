@@ -31,10 +31,10 @@ const Checkout = async (req, res) => {
     shipping_address_collection: {
       allowed_countries: ["HU"],
     },
-    locale: "hu",
-    allow_promotion_codes: true,
+    // locale: "hu",
+    // allow_promotion_codes: true,
     line_items: trans,
-    metadata: { items: JSON.stringify(items) },
+    // metadata: { items: JSON.stringify(items) },
     mode: "payment",
     success_url: `${req.headers.origin}/success`,
     cancel_url: `${req.headers.origin}/manage`,

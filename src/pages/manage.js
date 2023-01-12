@@ -35,13 +35,12 @@ const Customize = () => {
     await dispatch({ type: "APPEND", item });
     let scrollIndex = items.findIndex((elem) => elem.url === item.url);
     if (scrollIndex === -1) scrollIndex = Object.keys(items).length;
-    router.push(`#${scrollIndex}`);
+    var access = document.getElementById(String(scrollIndex));
+    access?.scrollIntoView({ behavior: "smooth" }, true);
+    router.push(`#${scrollIndex}`)
   };
   const decrement = (item) => {
     dispatch({ type: "DECREMENT", item });
-  };
-  const focus = (i) => {
-    router.push(`#${i}`);
   };
   const searchArtists = async (word) => {
     checkSpotify();
@@ -97,7 +96,7 @@ const Customize = () => {
 
   useEffect(() => {
     checkSpotify();
-    searchArtists("The Weekend Starboy")
+    searchArtists("The Weekend Starboy");
   }, []);
   useEffect(() => {
     const wrapper = document.getElementById("wrapper");
@@ -119,15 +118,23 @@ const Customize = () => {
     };
     wrapper.addEventListener("scroll", scroll);
     scroll();
+
+    // let c = 0;
+    // const interval = setInterval(() => {
+    //   var access = document.getElementById(String(++c % items.length));
+    //   access.scrollIntoView({ behavior: "smooth" }, true);
+    // }, 5000);
+
     return () => {
       window.removeEventListener("scroll", scroll);
+      // clearInterval(interval);
     };
   }, [items]);
 
   return (
     <div className="w-screen h-screen flex flex-col lg:flex-row">
       <div
-        className="flex-1 grid px-0 lg:px-8 py-8 lg:py-0 overflow-auto snap-both snap-mandatory"
+        className="flex-1 grid px-0 lg:px-8 py-8 lg:py-0 overflow-auto no-scrollbar snap-both snap-mandatory"
         id="wrapper"
       >
         <div className="w-full h-full flex flex-row lg:flex-col">
@@ -177,6 +184,7 @@ const Customize = () => {
             <button
               className="h-12 rounded-[12px] text-white bg-black"
               onClick={() => setState("SEARCH")}
+              type="button"
             >
               Lemez hozzáadása
             </button>
@@ -209,6 +217,7 @@ const Customize = () => {
             <button
               className="h-12 rounded-[12px] text-white bg-black"
               onClick={checkout}
+              type="button"
             >
               Fizetés
             </button>
@@ -250,6 +259,7 @@ const Customize = () => {
             <button
               className="h-12 rounded-[12px] text-white bg-black"
               onClick={() => setState("DEFAULT")}
+              type="button"
             >
               Vissza
             </button>
