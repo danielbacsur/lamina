@@ -6,7 +6,7 @@ import { getType, getUUID, translateType } from "utils";
 
 const IFrame = ({ tag }) => (
   <iframe
-    className="flex-grow h-[80px] rounded-[12px] shadow-lg"
+    className="flex-1 h-[80px] rounded-[12px] shadow-lg"
     src={`https://open.spotify.com/embed/${tag}`}
     allowFullScreen=""
     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
@@ -198,7 +198,7 @@ const Customize = () => {
                   >
                     <IFrame tag={tag} />
                     <button
-                      className="flex-none h-[80px] rounded-[12px] aspect-square shadow-lg"
+                      className="flex-1 h-[80px] rounded-[12px] aspect-square shadow-lg"
                       onClick={() => decrement(item)}
                       type="button"
                     >

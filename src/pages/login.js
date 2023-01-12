@@ -9,7 +9,6 @@ const Index = () => {
     const date = new Date();
     const hash = window.location.hash;
     const spotify = JSON.parse(window.localStorage.getItem("spotify"));
-    console.log(spotify);
     if (hash) {
       const token = hash
         .substring(1)
@@ -54,18 +53,6 @@ const Index = () => {
           >
             Spotify
           </button>
-          {/* <button
-            className="h-12 px-8 font-serif text-white bg-black rounded-full"
-            onClick={spotifyOAuth}
-          >
-            Apple Music
-          </button>
-          <button
-            className="h-12 px-8 font-serif text-black bg-[#ff8800] rounded-full"
-            onClick={spotifyOAuth}
-          >
-            SoundCloud
-          </button> */}
         </div>
       </div>
     </div>
