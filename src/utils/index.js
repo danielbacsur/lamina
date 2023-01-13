@@ -12,7 +12,7 @@ export const translateType = (type) => {
   const transition = {
     track: "zeneszám",
     playlist: "playlist",
-    album: "Album",
+    album: "album",
     artist: "előadó",
   };
   return transition[type]

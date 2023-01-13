@@ -128,7 +128,7 @@ const Customize = () => {
   return (
     <div className="w-screen h-screen flex flex-col md:flex-row">
       <div
-        className="w-screen md:w-1/2 h-[25%] md:h-screen grid px-0 md:px-8 py-8 md:py-0 overflow-auto no-scrollbar snap-both snap-mandatory"
+        className="w-screen md:w-1/2 h-[20%] md:h-screen grid px-0 md:px-8 py-8 md:py-0 overflow-auto no-scrollbar snap-both snap-mandatory"
         id="wrapper"
       >
         <div className="w-full h-full flex flex-row md:flex-col">
@@ -172,7 +172,7 @@ const Customize = () => {
           )} */}
         </div>
       </div>
-      <div className="w-screen md:w-1/2 h-[75%] md:h-screen grid place-items-center shadow-[15px_0_30px_0_rgba(0,0,0,0.18)] overflow-y-auto">
+      <div className="w-screen md:w-1/2 h-[80%] md:h-screen grid place-items-center shadow-[15px_0_30px_0_rgba(0,0,0,0.18)] overflow-auto">
         {/* {state === "DEFAULT" && (
           <form className="w-full flex flex-col gap-8">
             <button
@@ -259,7 +259,7 @@ const Customize = () => {
             </button>
           </form>
         )} */}
-        <div className="w-full h-full flex flex-col justify-between overflow-y-hidden">
+        {/* <div className="w-full h-full flex flex-col justify-between overflow-y-hidden">
           <div className="w-full h-full relative overflow-hidden">
             <div className="w-full h-full overflow-y-auto grid place-items-center overflow-hidden">
               default
@@ -330,6 +330,110 @@ const Customize = () => {
             >
               Fizetés 💰
             </button>
+          </div>
+        </div> */}
+        {/* <div className="absolute w-full top-0 flex gap-8 p-8 border-t">
+          {state === "SEARCH" && (
+            <>
+              <button
+                className="flex-1 h-12 rounded-[12px] text-white bg-black"
+                onClick={() => setState("asd")}
+                type="button"
+              >
+                Lemez hozzáadása
+              </button>
+              <button
+                className="flex-1 h-12 rounded-[12px] text-white bg-black"
+                onClick={() => setState("SEARCH")}
+                type="button"
+              >
+                Lemez hozzáadása
+              </button>
+            </>
+          )}
+
+          {state === "DEFAULT" && (
+            <button
+              className="w-full h-12 rounded-[12px] text-white bg-black"
+              onClick={() => setState("SEARCH")}
+              type="button"
+            >
+              Lemez hozzáadása
+            </button>
+          )}
+        </div>
+        <div className="absolute w-full bottom-0 p-8 border-t">
+          <button
+            className="w-full h-12 rounded-[12px] text-white bg-black"
+            onClick={() => setState("SEARCH")}
+            type="button"
+          >
+            Lemez hozzáadása
+          </button>
+        </div> */}
+        <div className="w-full flex flex-col gap-4 p-8">
+          {items.map((item) => {
+            const tag = item.url.split("open.spotify.com")[1].substring(1);
+            // return <ISlide tag={tag} onClick={() => decrement(item)} />;
+            return (
+              <div className="flex rounded-[12px] shadow-lg hover:scale-105 transition-all">
+                <iframe
+                  className="w-[80px] h-[80px] rounded-[12px] shadow-lg"
+                  src={`https://open.spotify.com/embed/${tag}`}
+                  allowFullScreen=""
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                />
+                <div className="w-full flex items-center justify-between px-4">
+                  <div className="flex flex-col">
+                    <span>{item.title}</span>
+                    <span>{item.type}</span>
+                  </div>
+                  <button className="bg-red-400 h-8 px-2 rounded-full hover:scale-105 transition-all">
+                    Eltávolítás
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+          <span className="w-full border-b border-black" />
+          <div className="h-[80px] flex items-center rounded-[12px] shadow-lg hover:scale-105 transition-all">
+            <div className="h-full aspect-square rounded-[12px] shadow-lg grid place-items-center text-2xl">
+              🔎
+            </div>
+            <input
+              className="w-full h-8 mx-4 border-b border-black outline-none"
+              onChange={(e) => {
+                searchArtists(e.target.value);
+              }}
+            />
+          </div>
+
+          <div className="flex gap-4 justify-between">
+            {Object.keys(searchJSON).map((key) => {
+              const url = searchJSON[key].items[0].external_urls.spotify;
+              const tag = searchJSON[key].items[0].uri
+                .substring(8)
+                .replace(":", "/");
+
+              return (
+                <div className="flex flex-col items-center hover:scale-105 transition-all" key={key}>
+                  <button className="relative" onClick={() => addFinal(url)}>
+                    <span className="absolute top-0 left-0 w-full h-full" />
+                    <iframe
+                      className="w-[80px] h-[80px] rounded-[12px] shadow-lg"
+                      src={`https://open.spotify.com/embed/${tag}`}
+                      allowFullScreen=""
+                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                      loading="lazy"
+                    />
+                  </button>
+                  <div className="h-[40px] grid place-items-center">
+                    {translateType(key.slice(0, -1))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

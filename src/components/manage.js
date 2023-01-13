@@ -1,6 +1,6 @@
 const IFrame = ({ tag }) => (
   <iframe
-    className="w-full h-[80px] rounded-[12px] shadow-lg"
+    className="w-full h-[80px] rounded-[12px] shadow-lg hover:mr-12"
     src={`https://open.spotify.com/embed/${tag}`}
     allowFullScreen=""
     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
