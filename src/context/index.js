@@ -6,7 +6,15 @@ const price = (quantity) =>
   Math.floor((40 * quantity - (quantity - 1) * 10) / quantity) * 100;
 
 function reducer(items, action) {
-  if (action.type === "RECOVER") {
+  if (action.type === "PRICING") {
+    const quantitySum = Object.values(items).reduce((accumulator, value) => {
+      return accumulator + value.quantity;
+    }, 0)
+    return items.map(item => ({
+      ...item,
+      price: price(quantitySum),
+    }));
+  } else if (action.type === "RECOVER") {
     return action.item;
   } else if (action.type === "APPEND") {
     return items.find((item) => item.url === action.item.url)
@@ -15,11 +23,10 @@ function reducer(items, action) {
             ? {
                 ...item,
                 quantity: item.quantity + 1,
-                price: price(item.quantity+1),
               }
             : item
         )
-      : [...items, { ...action.item, quantity: 1, price: price(1) }];
+      : [...items, { ...action.item, quantity: 1, price: 0 }];
   } else if (action.type === "DECREMENT") {
     return items.find((item) => item.url === action.item.url)?.quantity === 1
       ? items.filter((item) => item.url !== action.item.url)
@@ -28,7 +35,6 @@ function reducer(items, action) {
             ? {
                 ...item,
                 quantity: item.quantity - 1,
-                price: price(item.quantity-1),
               }
             : item
         );
