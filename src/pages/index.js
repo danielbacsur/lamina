@@ -5,7 +5,7 @@ const Index = () => {
   const Images = () =>
     [...Array(10)].map((e, i) => (
       <div
-        className="w-[25vh] h-[25vh] bg-cover rounded-[12px]"
+        className="w-[25vh] h-[25vh] bg-cover rounded"
         style={{ backgroundImage: `url(covers/${i}.jpg` }}
       />
     ));

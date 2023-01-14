@@ -4,18 +4,6 @@ module.exports = {
     "src/pages/**/*.{js,ts,jsx,tsx}",
     "src/components/**/*.{js,ts,jsx,tsx}",
   ],
-  methods: {
-    setViewHeight: function() {
-      let vh = window.innerHeight * 0.01
-      document.documentElement.style.setProperty('--vh', `${vh}px`)
-    },
-  },
-  mounted: function() {
-    this.setViewHeight()
-    window.addEventListener('resize', () => {
-      this.setViewHeight()
-    })
-  },
   theme: {
     height: (theme) => ({
       auto: "auto",
@@ -28,6 +16,10 @@ module.exports = {
       ...theme("spacing"),
       full: "100%",
       screen: "calc(var(--vh))",
+    }),
+    borderRadius: (theme) => ({
+      ...theme("spacing"),
+      DEFAULT: 	"0.75rem"
     }),
     extend: {
       fontFamily: {

@@ -1,4 +1,12 @@
 import axios from "axios";
+import {
+  Disclaimer,
+  OrderButton,
+  SearchBar,
+  SearchInputBar,
+  SearchResult,
+  SearchResultsWrapper,
+} from "components/manage";
 import { CartContext } from "context";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -11,9 +19,10 @@ const Customize = () => {
   const [index, setIndex] = useState(0);
   const [spotify, setSpotify] = useState({});
   const [searchJSON, setSearchJSON] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const checkout = async () => {
-    dispatch({ type: "PRICING" })
+    dispatch({ type: "PRICING" });
     console.log(items);
     const { data } = await axios.post("/api/checkout", {
       items,
@@ -23,7 +32,7 @@ const Customize = () => {
   };
   const append = (item) => {
     dispatch({ type: "APPEND", item });
-    dispatch({ type: "PRICING" })
+    dispatch({ type: "PRICING" });
     setTimeout(() => {
       let scrollIndex = items.findIndex((elem) => elem.url === item.url);
       if (scrollIndex === -1) scrollIndex = items.length;
@@ -38,7 +47,7 @@ const Customize = () => {
       access?.scrollIntoView({ behavior: "smooth" }, true);
     }
     dispatch({ type: "DECREMENT", item });
-    dispatch({ type: "PRICING" })
+    dispatch({ type: "PRICING" });
   };
   const searchArtists = async (word) => {
     checkSpotify();
@@ -120,6 +129,13 @@ const Customize = () => {
 
     return () => window.removeEventListener("scroll", scroll);
   }, [items]);
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      searchArtists(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   const SliderSpaceholder = () => (
     <div className="w-[25vw] md:w-full h-full md:h-[25vh] bg-white" />
@@ -154,7 +170,7 @@ const Customize = () => {
                     src="/record.png"
                   />
                   <div
-                    className="w-[10vh] md:w-[25vh] aspect-square rounded-[12px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)] z-10 group bg-cover group-hover:scale-105 transition-all duration-300"
+                    className="w-[10vh] md:w-[25vh] aspect-square rounded overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)] z-10 group bg-cover transition-all duration-300"
                     style={{ backgroundImage: `url(${item.image})` }}
                   />
                   <div
@@ -182,52 +198,31 @@ const Customize = () => {
       </div>
       <div className="w-screen md:w-1/2 h-[80%] md:h-screen shadow-[15px_0_30px_0_rgba(0,0,0,0.18)] overflow-auto p-8 flex flex-col items-center">
         <div className="w-full h-full flex flex-col gap-8">
-          <div className="w-full flex-none h-12 flex gap-4 border border-black rounded-[12px] overflow-hidden shadow-lg">
-            <div className="flex-none h-full aspect-square grid place-items-center shadow-lg bg-black/5">
-              🔎
-            </div>
-            <input
-              className="flex-1 text-center pr-4 outline-none"
-              onChange={(e) => {
-                searchArtists(e.target.value);
-              }}
-            />
-          </div>
-          <div className="w-full -mt-4 flex-none flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
+            <SearchBar onChange={setSearchTerm} />
             {Object.keys(searchJSON).map((key) => {
-              const url = searchJSON[key]?.items[0]?.external_urls?.spotify;
+              const itemUrl = searchJSON[key]?.items[0]?.external_urls?.spotify;
+              const imageUrl =
+                key === "tracks"
+                  ? searchJSON[key]?.items[0]?.album?.images[0]?.url
+                  : searchJSON[key]?.items[0]?.images[0]?.url;
 
               return (
-                <button
-                  className="w-full gap-4 pr-4 flex items-center justify-between hover:scale-105 transition-all shadow-lg rounded-[12px] overflow-hidden"
+                <SearchResult
                   key={key}
-                  onClick={() => addFinal(url)}
-                >
-                  <div
-                    className="flex-none w-12 aspect-square shadow-lg bg-cover transition-all"
-                    style={{
-                      backgroundImage: `url(${
-                        key === "tracks"
-                          ? searchJSON[key]?.items[0]?.album?.images[0]?.url
-                          : searchJSON[key]?.items[0]?.images[0]?.url
-                      })`,
-                    }}
-                  ></div>
-                  <span className="flex-1 font-serif text-left">
-                    {searchJSON[key]?.items[0]?.name}
-                  </span>
-                  <span className="font-serif text-sm capitalize">
-                    {translateType(key.slice(0, -1))} hozzáadása
-                  </span>
-                </button>
+                  src={imageUrl}
+                  title={searchJSON[key]?.items[0]?.name}
+                  text={`${translateType(key.slice(0, -1))} hozzáadása`}
+                  onClick={() => addFinal(itemUrl)}
+                />
               );
             })}
           </div>
-          <span className="md:hidden border-b border-black/50" />
+          {/* <span className="md:hidden border-b border-black/50" /> */}
           <div className="w-full flex-1 flex flex-col justify-end gap-4">
             {items.map((item) => {
               return (
-                <div className="md:hidden flex rounded-[12px] shadow-lg overflow-hidden hover:scale-105 transition-all">
+                <div className="md:hidden flex rounded shadow-lg overflow-hidden hover:scale-105 transition-all">
                   <div
                     className="w-12 h-12 aspect-square shadow-lg bg-cover bg-center transition-all"
                     style={{ backgroundImage: `url(${item.image})` }}
@@ -251,17 +246,18 @@ const Customize = () => {
               );
             })}
           </div>
-          <span className="text-center">Darabonként: {items[0]?.price}</span>
-          <button
-            className="w-full flex-none h-12 rounded-[12px] text-white bg-black font-serif"
-            onClick={checkout}
-          >
-            Megrendelés
-          </button>
+
+          <div className="flex flex-col gap-2">
+          <p className="text-sm text-center">
+    Több termék renndelése esetében áraink olcsóbbak!
+  </p>
+            <OrderButton text={"Megrendelés"} onClick={checkout} />
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 export default Customize;

@@ -30,7 +30,10 @@ const Index = () => {
         })
       );
     }
-    if (spotify?.expiration > date.getTime()) router.push("/manage");
+    if (spotify?.expiration > date.getTime())
+      setInterval(() => {
+        router.push("/manage");
+      }, 1000);
   }, []);
 
   const spotifyOAuth = async () => {
@@ -39,21 +42,19 @@ const Index = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col lg:flex-row">
+    <div className="w-screen h-screen flex flex-col md:flex-row">
       <div className="flex-1 grid place-items-center p-8">
         <span className="font-serif text-2xl text-center">
           Válassz platformot a folytatáshoz.
         </span>
       </div>
       <div className="flex-1 grid place-items-center p-8 shadow-[15px_0_30px_0_rgba(0,0,0,0.18)]">
-        <div className="flex flex-col gap-8">
-          <button
-            className="h-12 px-8 font-serif text-white bg-[#1db954] rounded-full"
-            onClick={spotifyOAuth}
-          >
-            Spotify
-          </button>
-        </div>
+        <button
+          className="h-12 px-8 font-serif text-white bg-[#1db954] rounded"
+          onClick={spotifyOAuth}
+        >
+          Spotify
+        </button>
       </div>
     </div>
   );
