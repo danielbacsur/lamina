@@ -85,6 +85,18 @@ const Customize = () => {
       }
     } else redirect();
   };
+  const getImgByURL = async (url) => {
+    try {
+      const { data } = await axios("https://open.spotify.com/oembed", {
+        params: {
+          url,
+        },
+      });
+      return data.thumbnail_url;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     checkSpotify();
@@ -172,269 +184,75 @@ const Customize = () => {
           )} */}
         </div>
       </div>
-      <div className="w-screen md:w-1/2 h-[80%] md:h-screen grid place-items-center shadow-[15px_0_30px_0_rgba(0,0,0,0.18)] overflow-auto">
-        {/* {state === "DEFAULT" && (
-          <form className="w-full flex flex-col gap-8">
-            <button
-              className="h-12 rounded-[12px] text-white bg-black"
-              onClick={() => setState("SEARCH")}
-              type="button"
-            >
-              Lemez hozzáadása
-            </button>
-            <div className="flex flex-col gap-4">
-              {items.map((item) => {
-                const tag = item.url.split("open.spotify.com")[1].substring(1);
-                return (
-                  <div
-                    className="flex items-center justify-between gap-4"
-                    key={item.url}
-                  >
-                    <IFrame tag={tag} />
-                    <button
-                      className="flex-1 h-[80px] rounded-[12px] aspect-square shadow-lg"
-                      onClick={() => decrement(item)}
-                      type="button"
-                    >
-                      -
-                    </button>
-                  </div>
-                );
-              })}
-              {items.length === 0 && (
-                <span className="shadow-lg h-[80px] rounded-[12px] grid place-items-center">
-                  A kosarad üres
-                </span>
-              )}
-            </div>
-
-            <button
-              className="h-12 rounded-[12px] text-white bg-black"
-              onClick={checkout}
-              type="button"
-            >
-              Fizetés
-            </button>
-          </form>
-        )}
-        {state === "SEARCH" && (
-          <form className="w-full flex flex-col gap-8">
-            <input
-              className="w-full h-12 rounded-[12px] border border-black shadow-lg text-center"
-              type="text"
-              onChange={(e) => {
-                searchArtists(e.target.value);
-              }}
-            />
-            <div className="flex flex-col gap-4">
-              {Object.keys(searchJSON).map((key) => {
-                const url = searchJSON[key].items[0].external_urls.spotify;
-                const suri = searchJSON[key].items[0].uri
-                  .substring(8)
-                  .replace(":", "/");
-
-                return (
-                  <div
-                    className="flex items-center justify-between gap-4"
-                    key={key}
-                  >
-                    <IFrame tag={suri} />
-                    <button
-                      className="flex-none h-[80px] rounded-[12px] aspect-square shadow-lg"
-                      onClick={() => addFinal(url)}
-                      type="button"
-                    >
-                      +
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-            <button
-              className="h-12 rounded-[12px] text-white bg-black"
-              onClick={() => setState("DEFAULT")}
-              type="button"
-            >
-              Vissza
-            </button>
-          </form>
-        )} */}
-        {/* <div className="w-full h-full flex flex-col justify-between overflow-y-hidden">
-          <div className="w-full h-full relative overflow-hidden">
-            <div className="w-full h-full overflow-y-auto grid place-items-center overflow-hidden">
-              default
-            </div>
-            <div
-              className={clsx(
-                "w-full h-full overflow-y-auto bg-white transition-all duration-200 grid place-items-center",
-                state === "SEARCH" ? "-translate-y-full" : "translate-y-0"
-              )}
-            >
-              <div className="w-full flex flex-col items-center justify-center gap-8 p-8">
-
-
-                <input
-                  className="w-full h-12 rounded-[12px] border-2 border-black shadow-lg text-center"
-                  onChange={(e) => {
-                    searchArtists(e.target.value);
-                  }}
-                />
-                <div className="w-full grid lg:grid-cols-2 gap-8">
-                  {Object.keys(searchJSON).map((key) => {
-                    const url = searchJSON[key].items[0].external_urls.spotify;
-                    const suri = searchJSON[key].items[0].uri
-                      .substring(8)
-                      .replace(":", "/");
-
-                    return (
-                      <div className="flex flex-col rounded-[12px] hover:scale-105 transition-all">
-                        <IFrame tag={suri} key={key} />
-                        <button
-                          className="h-8 rounded-[12px] aspect-square shadow-lg"
-                          onClick={() => addFinal(url)}
-                          type="button"
-                        >
-                          <span className="capitalize">
-                            {translateType(key.slice(0, -1))} hozzáadása
-                          </span>
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              </div>
-
-          </div>
-
-          <div className="w-full flex flex-col lg:flex-row gap-4 lg:gap-8 p-8 border-t">
-            {state === "DEFAULT" && (
-              <button
-                className="w-full h-12 rounded-[12px] text-white bg-black"
-                onClick={() => setState("SEARCH")}
-              >
-                Kereső megnyitása 🔎
-              </button>
-            )}
-            {state === "SEARCH" && (
-              <button
-                className="w-full h-12 rounded-[12px] border-2 border-black"
-                onClick={() => setState("DEFAULT")}
-              >
-                Vissza ⬅️
-              </button>
-            )}
-            <button
-              className="w-full h-12 rounded-[12px] text-white bg-black"
-              onClick={checkout}
-            >
-              Fizetés 💰
-            </button>
-          </div>
-        </div> */}
-        {/* <div className="absolute w-full top-0 flex gap-8 p-8 border-t">
-          {state === "SEARCH" && (
-            <>
-              <button
-                className="flex-1 h-12 rounded-[12px] text-white bg-black"
-                onClick={() => setState("asd")}
-                type="button"
-              >
-                Lemez hozzáadása
-              </button>
-              <button
-                className="flex-1 h-12 rounded-[12px] text-white bg-black"
-                onClick={() => setState("SEARCH")}
-                type="button"
-              >
-                Lemez hozzáadása
-              </button>
-            </>
-          )}
-
-          {state === "DEFAULT" && (
-            <button
-              className="w-full h-12 rounded-[12px] text-white bg-black"
-              onClick={() => setState("SEARCH")}
-              type="button"
-            >
-              Lemez hozzáadása
-            </button>
-          )}
-        </div>
-        <div className="absolute w-full bottom-0 p-8 border-t">
-          <button
-            className="w-full h-12 rounded-[12px] text-white bg-black"
-            onClick={() => setState("SEARCH")}
-            type="button"
-          >
-            Lemez hozzáadása
-          </button>
-        </div> */}
-        <div className="w-full flex flex-col gap-4 p-8">
-          {items.map((item) => {
-            const tag = item.url.split("open.spotify.com")[1].substring(1);
-            // return <ISlide tag={tag} onClick={() => decrement(item)} />;
-            return (
-              <div className="flex rounded-[12px] shadow-lg hover:scale-105 transition-all">
-                <iframe
-                  className="w-[80px] h-[80px] rounded-[12px] shadow-lg"
-                  src={`https://open.spotify.com/embed/${tag}`}
-                  allowFullScreen=""
-                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                  loading="lazy"
-                />
-                <div className="w-full flex items-center justify-between px-4">
-                  <div className="flex flex-col">
-                    <span>{item.title}</span>
-                    <span>{item.type}</span>
-                  </div>
-                  <button className="bg-red-400 h-8 px-2 rounded-full hover:scale-105 transition-all">
-                    Eltávolítás
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-          <span className="w-full border-b border-black" />
-          <div className="h-[80px] flex items-center rounded-[12px] shadow-lg hover:scale-105 transition-all">
-            <div className="h-full aspect-square rounded-[12px] shadow-lg grid place-items-center text-2xl">
+      <div className="w-screen md:w-1/2 h-[80%] md:h-screen shadow-[15px_0_30px_0_rgba(0,0,0,0.18)] overflow-auto p-8 flex flex-col items-center">
+        <div className="w-full h-full flex flex-col gap-8 max-w-sm">
+          <div className="w-full flex-none h-12 flex gap-4 border border-black rounded-full overflow-hidden">
+            <div className="flex-none h-full aspect-square grid place-items-center rounded-full shadow-lg">
               🔎
             </div>
             <input
-              className="w-full h-8 mx-4 border-b border-black outline-none"
+              className="flex-1 text-center pr-4 outline-none"
               onChange={(e) => {
                 searchArtists(e.target.value);
               }}
             />
           </div>
-
-          <div className="flex gap-4 justify-between">
+          <div className="w-full flex-none flex gap-4 justify-between">
             {Object.keys(searchJSON).map((key) => {
-              const url = searchJSON[key].items[0].external_urls.spotify;
-              const tag = searchJSON[key].items[0].uri
-                .substring(8)
-                .replace(":", "/");
+              const url = searchJSON[key]?.items[0]?.external_urls?.spotify;
 
               return (
-                <div className="flex flex-col items-center hover:scale-105 transition-all" key={key}>
-                  <button className="relative" onClick={() => addFinal(url)}>
-                    <span className="absolute top-0 left-0 w-full h-full" />
-                    <iframe
-                      className="w-[80px] h-[80px] rounded-[12px] shadow-lg"
-                      src={`https://open.spotify.com/embed/${tag}`}
-                      allowFullScreen=""
-                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                      loading="lazy"
-                    />
-                  </button>
-                  <div className="h-[40px] grid place-items-center">
-                    {translateType(key.slice(0, -1))}
+                <div
+                  className="flex-1 max-w-[6rem] flex flex-col items-center hover:scale-105 transition-all"
+                  key={key}
+                >
+                  <button
+                    onClick={() => addFinal(url)}
+                    className="w-full  aspect-square rounded-[12px] shadow-lg bg-cover transition-all"
+                    style={{
+                      backgroundImage: `url(${
+                        key === "tracks"
+                          ? searchJSON[key]?.items[0]?.album?.images[0]?.url
+                          : searchJSON[key]?.items[0]?.images[0]?.url
+                      })`,
+                    }}
+                  ></button>
+                  {translateType(key.slice(0, -1))}
+                </div>
+              );
+            })}
+          </div>
+          {/* <span className="border-b border-black/50" /> */}
+          <div className="w-full flex-1 flex flex-col justify-end gap-4">
+            {items.map((item) => {
+              return (
+                <div className="flex rounded-[12px] shadow-lg hover:scale-105 transition-all">
+                  <div
+                    className="w-16 aspect-square rounded-[12px] shadow-lg bg-cover bg-center transition-all"
+                    style={{ backgroundImage: `url(${item.image})` }}
+                  />
+                  <div className="w-full flex items-center justify-between px-4">
+                    <span>
+                      {item.title} - {translateType(item.type)}
+                    </span>
+                    <button
+                      className="bg-red-400 h-8 px-2 rounded-full hover:scale-105 transition-all"
+                      onClick={() => decrement(item)}
+                    >
+                      Eltávolítás
+                    </button>
                   </div>
                 </div>
               );
             })}
           </div>
+          <button
+            className="w-full flex-none h-12 rounded-[12px] text-white bg-black"
+            onClick={checkout}
+            type="button"
+          >
+            Fizetés
+          </button>
         </div>
       </div>
     </div>
