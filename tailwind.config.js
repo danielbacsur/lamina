@@ -17,14 +17,7 @@ module.exports = {
       full: "100%",
       screen: "calc(var(--vh))",
     }),
-    borderRadius: (theme) => ({
-      ...theme("spacing"),
-      DEFAULT: 	"0.75rem"
-    }),
     extend: {
-      fontFamily: {
-        yellowtail: ["Yellowtail", "cursive"],
-      },
       animation: {
         marquee: "marquee 60s linear infinite",
         marquee2: "marquee2 60s linear infinite",
