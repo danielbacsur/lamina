@@ -4,7 +4,7 @@ import * as ReactDOM from 'react-dom'
 import { context as fiberContext, useFrame, useThree } from '@react-three/fiber'
 import mergeRefs from 'react-merge-refs'
 
-const context = React.createContext<ScrollControlsState>(null)
+const context = React.createContext(null)
 
 export function useScroll() {
   return React.useContext(context)
@@ -154,7 +154,7 @@ export function ScrollControls({
 }
 
 const ScrollCanvas = React.forwardRef(({ children }, ref) => {
-  const group = React.useRef<THREE.Group>(null)
+  const group = React.useRef(null)
   const state = useScroll()
   const { width, height } = useThree((state) => state.viewport)
   useFrame(() => {
@@ -167,7 +167,7 @@ const ScrollCanvas = React.forwardRef(({ children }, ref) => {
 const ScrollHtml = React.forwardRef(
   ({ children, style, ...props }, ref) => {
     const state = useScroll()
-    const group = React.useRef<HTMLDivElement>(null)
+    const group = React.useRef(null)
     const { width, height } = useThree((state) => state.size)
     const fiberState = React.useContext(fiberContext)
     useFrame(() => {
