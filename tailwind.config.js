@@ -18,19 +18,19 @@ module.exports = {
       screen: "calc(var(--vh))",
     }),
     extend: {
-      animation: {
-        marquee: "marquee 60s linear infinite",
-        marquee2: "marquee2 60s linear infinite",
+      height: {
+        screen: "calc(var(--vh))",
       },
-      keyframes: {
-        marquee: {
-          "0%": { transform: "translateX(0%)" },
-          "100%": { transform: "translateX(-100%)" },
-        },
-        marquee2: {
-          "0%": { transform: "translateX(100%)" },
-          "100%": { transform: "translateX(0%)" },
-        },
+      minHeight: {
+        screen: "calc(var(--vh))",
+      },
+      fontFamily: {
+        playfair: ["Cormorant Garamond", "serif"],
+        cormorant: ["Playfair Display", "serif"],
+      },
+      colors: {
+        brand: "#E14D2A",
+        "brand-hover": "#d2401d"
       },
     },
   },

@@ -2,16 +2,17 @@ import { Suspense, useEffect, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Preload } from "@react-three/drei";
 import { ScrollControls, Scroll, useScroll } from "components/ScrollControls";
+import { Break, First, Footer, Second } from "components/index";
 
 const HTMLComponents = () => {
   const Components = ({ ...args }) => {
     return (
-      <div {...args}>
+      <div {...args} id="html-components">
         <div className="w-screen pr-[14px]">
-          <div className="h-[80vh] bg-red-500">11</div>
-          <div className="h-[40vh] bg-blue-500">12</div>
-          <div className="h-[80vh] bg-blue-500">13</div>
-          <div className="h-[40vh] bg-purple-500">13</div>
+          <First />
+          <Break />
+          <Second />
+          <Footer />
         </div>
       </div>
     );
@@ -49,6 +50,14 @@ const Index = () => {
         navigator.userAgent
       )
     );
+    
+    const resize = () => {
+      console.log(window.innerHeight)
+    };
+    window.addEventListener("resize", resize);
+    resize();
+
+    return () => window.removeEventListener("resize", resize);
   }, []);
 
   return (
@@ -57,7 +66,7 @@ const Index = () => {
         <Suspense fallback={null}>
           <ScrollControls
             infinite={!isMobile}
-            damping={isMobile ? 40 : 4}
+            damping={isMobile ? 80 : 8}
             pages={2.4 + (isMobile ? 0 : 1)}
           >
             <ImageComponents infinite={isMobile} />
