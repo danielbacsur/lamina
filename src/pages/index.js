@@ -48,9 +48,10 @@ const Hero = () => {
     <div class="w-screen h-screen grid place-items-center p-8 md:p-12 lg:px-16 lg:py-24">
       <div class="text-center space-y-16">
         <h4 class="max-w-4xl mx-auto font-cormorant font-extrabold text-4xl sm:text-5xl md:text-6xl">
-          Tedd egyedivé szobádat
-          <br />
-          kedvend zenéid borítóival.
+          <div className="flex flex-col gap-8">
+            <span>Tedd egyedivé szobádat</span>
+            <span>kedvend zenéid borítóival.</span>
+          </div>
         </h4>
 
         <button
