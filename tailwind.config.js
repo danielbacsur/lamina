@@ -25,8 +25,8 @@ module.exports = {
         screen: "calc(var(--vh))",
       },
       fontFamily: {
-        playfair: ["Cormorant Garamond", "serif"],
-        cormorant: ["Playfair Display", "serif"],
+        playfair: ["Playfair Display", "serif"],
+        cormorant: ["Cormorant Garamond", "serif"],
       },
       colors: {
         brand: "#E14D2A",
