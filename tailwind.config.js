@@ -5,18 +5,6 @@ module.exports = {
     "src/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    height: (theme) => ({
-      auto: "auto",
-      ...theme("spacing"),
-      full: "100%",
-      screen: "calc(var(--vh))",
-    }),
-    minHeight: (theme) => ({
-      0: "0",
-      ...theme("spacing"),
-      full: "100%",
-      screen: "calc(var(--vh))",
-    }),
     extend: {
       height: {
         screen: "calc(var(--vh))",
@@ -26,11 +14,21 @@ module.exports = {
       },
       fontFamily: {
         playfair: ["Playfair Display", "serif"],
-        cormorant: ["Cormorant Garamond", "serif"],
+        // cormorant: ["Cormorant Garamond", "serif"],
       },
       colors: {
-        brand: "#E14D2A",
-        "brand-hover": "#d2401d"
+        'brand': {
+          '50': 'rgb(243, 239, 255)',
+          '100': 'rgb(225, 217, 255)',
+          '200': 'rgb(206, 190, 255)',
+          '300': 'rgb(188, 162, 255)',
+          '400': 'rgb(169, 135, 255)',
+          '500': 'rgb(151, 107, 255)',
+          '600': 'rgb(132, 80, 255)',
+          '700': 'rgb(114, 52, 255)',
+          '800': 'rgb(95, 25, 255)',
+          '900': 'rgb(77, 0, 255)'
+        },
       },
     },
   },

@@ -14,34 +14,40 @@ import {
   CuboidCollider,
   InstancedRigidBodies,
 } from "@react-three/rapier";
-import { useRouter } from "next/router";
 
 const Index = () => (
   <>
     <Three />
-    {/* <Hero /> */}
     <Content />
   </>
 );
 
 const Content = () => {
   const Hero = () => {
+    const Title = () => (
+      <span class="text-3xl font-medium text-gray-900 sm:text-5xl font-playfair">
+        Egyedi NFC Borítóképek
+      </span>
+    );
+    const Subtitle = () => (
+      <p class="max-w-sm mx-auto mt-6 text-gray-500">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cum maiores
+        ipsum eos temporibus ea nihil.
+      </p>
+    );
+    const Button = () => (
+      <a
+        class="pointer-events-auto inline-block px-12 py-3 mt-8 text-sm font-medium text-brand-900 border border-brand-900 rounded-full hover:bg-brand-900 hover:text-white focus:outline-none focus:ring active:bg-brand-800"
+        href="login"
+      >
+        Tovább a rendeléshez
+      </a>
+    );
     return (
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div class="text-center">
-          <h2 class="text-3xl font-bold text-gray-900 sm:text-5xl">
-            Egyedi NFC Borítóképek
-          </h2>
-
-          <p class="max-w-sm mx-auto mt-6 text-gray-500">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cum
-            maiores ipsum eos temporibus ea nihil.
-          </p>
-
-          <a class="pointer-events-auto inline-block px-12 py-3 mt-6 text-sm font-medium text-indigo-600 border border-indigo-600 rounded-full hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500">
-            Tovább a rendeléshez
-          </a>
-        </div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+        <Title />
+        <Subtitle />
+        <Button />
       </div>
     );
   };
@@ -149,7 +155,6 @@ const Content = () => {
     </div>
   );
 };
-
 const Three = () => {
   return (
     <div className="w-screen h-screen absolute -z-[999]">
@@ -247,7 +252,7 @@ const Covers = ({ count = 96, rand = MathUtils.randFloatSpread }) => {
         dispose={null}
       >
         <boxBufferGeometry args={[1, 0.025, 1]} />
-        {/* <meshPhongMaterial color="#18a36e" attach="material" /> */}
+        {/* <meshPhongMaterial color="#b0b91a" attach="material" /> */}
         <meshStandardMaterial map={colorMap} />
       </instancedMesh>
     </InstancedRigidBodies>
