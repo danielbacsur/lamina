@@ -25,26 +25,26 @@ const Index = () => (
 const Content = () => {
   const Hero = () => {
     const Title = () => (
-      <span class="text-3xl font-medium text-gray-900 sm:text-5xl font-playfair">
+      <span className="text-3xl font-bold text-gray-900 sm:text-5xl">
         Egyedi NFC Borítóképek
       </span>
     );
     const Subtitle = () => (
-      <p class="max-w-sm mx-auto mt-6 text-gray-500">
+      <p className="max-w-sm mx-auto mt-6 text-gray-500">
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cum maiores
         ipsum eos temporibus ea nihil.
       </p>
     );
     const Button = () => (
       <a
-        class="pointer-events-auto inline-block px-12 py-3 mt-8 text-sm font-medium text-brand-900 border border-brand-900 rounded-full hover:bg-brand-900 hover:text-white focus:outline-none focus:ring active:bg-brand-800"
+        className="pointer-events-auto inline-block px-12 py-3 mt-8 text-sm font-medium text-brand-900 border border-brand-900 rounded-full hover:bg-brand-900 hover:text-white focus:outline-none focus:ring active:bg-brand-800"
         href="login"
       >
         Tovább a rendeléshez
       </a>
     );
     return (
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
         <Title />
         <Subtitle />
         <Button />
@@ -57,14 +57,14 @@ const Content = () => {
         return (
           <a
             href={href}
-            class="text-gray-500 transition hover:opacity-75 pointer-events-auto"
+            className="text-gray-500 transition hover:opacity-75 pointer-events-auto"
           >
             {text}
           </a>
         );
       };
       return (
-        <div class="flex flex-wrap justify-center gap-4 text-xs lg:justify-end">
+        <div className="flex flex-wrap justify-center gap-4 text-xs lg:justify-end">
           <Reference href="#" text="Terms & Conditions" />
           <Reference href="#" text="Privacy Policy" />
           <Reference href="#" text="Cookies" />
@@ -74,7 +74,7 @@ const Content = () => {
     const Socials = () => {
       const Facebook = () => (
         <svg
-          class="w-6 h-6"
+          className="w-6 h-6"
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -88,7 +88,7 @@ const Content = () => {
       );
       const Instagram = () => (
         <svg
-          class="w-6 h-6"
+          className="w-6 h-6"
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -102,7 +102,7 @@ const Content = () => {
       );
       const Twitter = () => (
         <svg
-          class="w-6 h-6"
+          className="w-6 h-6"
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -113,16 +113,16 @@ const Content = () => {
       const Reference = ({ href, title, icon }) => {
         return (
           <a
-            class="text-gray-700 transition hover:opacity-75 pointer-events-auto"
+            className="text-gray-700 transition hover:opacity-75 pointer-events-auto"
             href={href}
           >
-            <span class="sr-only">{title}</span>
+            <span className="sr-only">{title}</span>
             {icon}
           </a>
         );
       };
       return (
-        <div class="flex justify-center gap-6 mt-8 sm:mt-0 lg:justify-end">
+        <div className="flex justify-center gap-6 mt-8 sm:mt-0 lg:justify-end">
           <Reference
             href="https://www.facebook.com"
             title="Facebook"
@@ -142,7 +142,7 @@ const Content = () => {
       );
     };
     return (
-      <div class="absolute bottom-12 left-12 right-12 sm:flex sm:items-center sm:justify-between">
+      <div className="absolute bottom-12 left-12 right-12 sm:flex sm:items-center sm:justify-between">
         <Legal />
         <Socials />
       </div>
