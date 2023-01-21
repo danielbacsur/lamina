@@ -1,4 +1,9 @@
+import { usePlatform } from "context/platform";
+import { Router, useRouter } from "next/router";
+
 const Product = () => {
+  const router = useRouter();
+  const {platforms, dispatch} = usePlatform()
   const Left = () => {
     return (
       <div className="w-full md:w-[50vw] h-[50vh] md:h-screen grid place-items-center px-12 pt-12 md:pb-12">
@@ -107,14 +112,29 @@ const Product = () => {
         );
       };
 
+      //   useEffect(() => {}, [type, search]) setResult
+
+      const spotify = () => {
+        let redirect = process.env.NEXT_PUBLIC_SPOTYFY_AUTH_ENDPOINT;
+        redirect += `?client_id=${process.env.NEXT_PUBLIC_SPOTYFY_CLIENT_ID}`;
+        redirect += `&redirect_uri=${location.origin}/product`;
+        redirect += `&response_type=${process.env.NEXT_PUBLIC_SPOTYFY_RESPONSE_TYPE}`;
+        return redirect;
+      };
+
       const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === "platform") {
           if (value === "spotify") {
+            router.push(spotify());
+            // if not valid token
             console.log("OAuth");
+            // else OK
           }
         } else if (name === "type") {
+          // set type
         } else if (name === "search") {
+          // set search
         } else if (name === "result") {
         }
         // e.preventDefault();
@@ -125,8 +145,8 @@ const Product = () => {
         <form className="flex flex-col gap-6" onChange={(e) => handleChange(e)}>
           <Fieldset title="Platform">
             <Input title="Spotify" name="platform" value="spotify" />
-            <Input title="Apple Music" name="platform" value="spotify" />
-            <Input title="Soundcloud" name="platform" value="spotify" />
+            <Input title="Apple Music" name="platform" value="apple" onClick={() => dispatch({type: "APPLE", token: "KORTE", expiration: 420})} />
+            <Input title="Soundcloud" name="platform" value="soundcloud" onClick={() => dispatch({type: "SPOTIFY", token: "ALMA", expiration: 123})} />
           </Fieldset>
           <Fieldset title="Keresés típúsa">
             <Input title="Zeneszám" name="type" />
@@ -134,7 +154,7 @@ const Product = () => {
             <Input title="Album" name="type" />
             <Input title="Előadó" name="type" />
           </Fieldset>
-          <Fieldset title="Keresés">
+          <Fieldset>
             <input
               type="text"
               name="search"
@@ -171,7 +191,7 @@ const Product = () => {
           <div class="flex">
             <button
               type="submit"
-              class="w-full block px-4 py-2 text-xs text-white bg-brand-900 rounded-full hover:bg-brand-800"
+              class="w-full block px-4 py-2 font-medium text-xs text-white bg-brand-900 rounded-full hover:bg-brand-800"
             >
               Kosárhoz adás
             </button>

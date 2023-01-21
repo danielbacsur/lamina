@@ -15,7 +15,7 @@ function reducer(items, action) {
       price: price(quantitySum),
     }));
   } else if (action.type === "RECOVER") {
-    return action.item;
+    return action.items;
   } else if (action.type === "APPEND") {
     return items.find((item) => item.url === action.item.url)
       ? items.map((item) =>
@@ -55,7 +55,7 @@ const CartProvider = ({ children }) => {
     if (JSON.parse(localStorage.getItem("items")) === null) return;
     dispatch({
       type: "RECOVER",
-      item: JSON.parse(localStorage.getItem("items")),
+      items: JSON.parse(localStorage.getItem("items")),
     });
   }, []);
 

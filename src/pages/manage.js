@@ -7,13 +7,13 @@ import {
   SearchResult,
   SearchResultsWrapper,
 } from "components/manage";
-import { CartContext } from "context";
+import { PlatformContetx } from "context/cart";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { getType, translateType } from "utils";
 
 const Customize = () => {
-  const { items, dispatch } = useContext(CartContext);
+  const { items, dispatch } = useContext(PlatformContetx);
   const router = useRouter();
 
   const [index, setIndex] = useState(0);
