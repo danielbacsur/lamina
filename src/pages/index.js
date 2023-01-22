@@ -38,7 +38,7 @@ const Content = () => {
     const Button = () => (
       <a
         className="pointer-events-auto inline-block px-12 py-3 mt-8 text-sm font-medium text-brand-900 border border-brand-900 rounded-full hover:bg-brand-900 hover:text-white focus:outline-none focus:ring active:bg-brand-800"
-        href="login"
+        href="/product"
       >
         Tovább a rendeléshez
       </a>
