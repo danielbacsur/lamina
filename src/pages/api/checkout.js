@@ -1,9 +1,7 @@
 import Stripe from "stripe";
-import { translateType } from "utils";
+import { capitalize, translateType } from "utils";
 
-const stripe = new Stripe(
-  "sk_test_51MNIXiFHXQAurXSs0A7uZKkQvKArBxCwOhN9F0eWJbBJ0gagRNrkgXbWtOlw6ig2EVoF4CLMMgp5XFCkR7LdJeAo00dRO8v59g"
-);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const Checkout = async (req, res) => {
   const { items } = req.body;
@@ -14,7 +12,9 @@ const Checkout = async (req, res) => {
       product_data: {
         name: item.name,
         images: [item.image],
-        description: `${item.type}${item.artists ? ` by ${item.artists}`: ""}`,
+        description: `${capitalize(item.type)}${
+          item.artists ? ` by ${item.artists}` : ""
+        }`,
         metadata: {
           ...item,
         },
