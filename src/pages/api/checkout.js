@@ -12,9 +12,9 @@ const Checkout = async (req, res) => {
     price_data: {
       currency: "huf",
       product_data: {
-        name: item.title,
+        name: item.name,
         images: [item.image],
-        description: translateType(item.type),
+        description: `${item.type}${item.artists ? ` by ${item.artists}`: ""}`,
         metadata: {
           ...item,
         },
@@ -32,7 +32,7 @@ const Checkout = async (req, res) => {
     line_items: trans,
     mode: "payment",
     success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${req.headers.origin}/manage`,
+    cancel_url: `${req.headers.origin}/product`,
   });
   res.status(200).json(session.url);
 };

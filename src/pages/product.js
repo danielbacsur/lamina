@@ -1,218 +1,312 @@
-import { usePlatform } from "context/platform";
-import { Router, useRouter } from "next/router";
+import axios from "axios";
+import Cart from "components/Cart";
+import { useCart } from "context/cart";
+import { useForm } from "context/form";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const Product = () => {
+  const { formData, dispatch: formDataDispatch } = useForm();
+  const { items, dispatch: cartDispatch } = useCart();
+  const [platforms, setPlatforms] = useState({});
+  const setPlatform = (platform) => {
+    setPlatforms({ ...platforms, ...platform });
+  };
+  const [prices, setPrices] = useState({});
+  const price = () => Object.values(prices).reduce((a, b) => a + b, 0);
   const router = useRouter();
-  const {platforms, dispatch} = usePlatform()
-  const Left = () => {
+
+  const search = () => {
+    if (!formData.search || !formData.type) return;
+    ({
+      spotify: async () => {
+        try {
+          const { data } = await axios.get(
+            "https://api.spotify.com/v1/search",
+            {
+              headers: {
+                Authorization: `${platforms[formData.platform].token_type} ${
+                  platforms[formData.platform].access_token
+                }`,
+              },
+              params: {
+                q: formData.search,
+                type: formData.type,
+                limit: 5,
+              },
+            }
+          );
+          formDataDispatch({
+            type: "ASSIGN",
+            key: "results",
+            value: data[Object.keys(data)[0]].items.map((item) => ({
+              type: formData.type,
+              name: item.name,
+              artists: item.artists?.map((artist) => artist.name).join(", "),
+              uri: item.uri,
+              url: item.external_urls.spotify,
+              image: item.album?.images[0].url || item.images[0]?.url,
+            })),
+          });
+        } catch {}
+      },
+      apple: async () => {},
+      soundcloud: async () => {},
+    }[formData.platform]());
+  };
+
+  const handleChange = async (e) => {
+    const { name, value } = e.target;
+    formDataDispatch({ type: "ASSIGN", key: name, value });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    const { search, result, results, ...rest } = {
+      ...formData,
+      ...formData.results.find((result) => result.url === formData.result),
+      price: price(),
+    };
+    console.log(rest);
+
+    cartDispatch({ type: "APPEND", item: rest });
+  };
+  const handleCheckout = async () => {
+    console.log(items);
+    const { data } = await axios.post("/api/checkout", {
+      items,
+    });
+    router.push(data);
+  };
+
+  useEffect(() => {
+    if (!formData.platform) return;
+    const request = async () => {
+      const { data } = await axios.get(`/api/platform/${formData.platform}`);
+      setPlatform({ [formData.platform]: data });
+    };
+    request();
+  }, [formData.platform]);
+  useEffect(() => {
+    if (!formData.type) return;
+    search();
+  }, [formData.type]);
+  useEffect(() => {
+    if (!formData.search) return;
+    const delayDebounceFn = setTimeout(() => {
+      search();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [formData.search]);
+  useEffect(() => {
+    if (!formData.result) return;
+    if (
+      formData.results.find((result) => result.url === formData.result) ===
+      undefined
+    ) {
+      formDataDispatch({
+        type: "ASSIGN",
+        key: "result",
+        value: formData.results[0].url,
+      });
+    }
+  }, [formData.results]);
+  useEffect(() => {
+    const { size: s, function: f, quantity: q, material: m } = formData;
+    if (!s || !f || !q || !m) return;
+
+    setPrices({
+      size: { small: -250, medium: 0, big: 250 }[s],
+      function: { normal: -250, smart: 0 }[f],
+      quantity: { 1: 4000, 2: 3500, 5: 3000 }[q],
+      material: { paper: -250, carbonate: 0 }[m],
+    });
+  }, [formData.size, formData.function, formData.quantity, formData.material]);
+
+  const Fieldset = ({ title, children }) => {
     return (
-      <div className="w-full md:w-[50vw] h-[50vh] md:h-screen grid place-items-center px-12 pt-12 md:pb-12">
-        <img
-          alt="Product Image"
-          src="https://images.unsplash.com/photo-1456948927036-ad533e53865c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-          class="object-cover w-[25vh] md:w-[25vw] aspect-square rounded-xl shadow-xl"
-        />
-      </div>
+      <fieldset>
+        <legend className="mb-1 text-sm font-medium">{title}</legend>
+
+        <div className="flow-root">
+          <div className="-m-0.5 flex flex-wrap">{children}</div>
+        </div>
+      </fieldset>
     );
   };
-  const Right = () => {
-    const TitleSubtitlePrice = () => {
-      return (
-        <div class="flex justify-between">
-          <div>
-            <h1 class="text-2xl font-bold">Lamina Falkép</h1>
+  const Input = ({ title, name, value, ...args }) => {
+    const enabled = formData[name] == value;
+    return (
+      <label htmlFor={`${name}-${value}`} className="cursor-pointer p-0.5">
+        <input
+          type="radio"
+          defaultChecked={enabled}
+          name={name}
+          value={value}
+          id={`${name}-${value}`}
+          className="sr-only peer"
+          {...args}
+        />
+        <span className="inline-block px-3 py-1 text-xs font-medium border rounded-full group peer-checked:bg-black peer-checked:text-white">
+          {title}
+        </span>
+      </label>
+    );
+  };
 
-            <p class="mt-0.5 text-sm">Beépített NFC csippel.</p>
-          </div>
-
-          <p class="text-2xl font-bold">4000 Ft</p>
-        </div>
-      );
-    };
-    const Details = () => {
-      const Short = () => (
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa veniam
-          dicta beatae eos ex error culpa delectus rem tenetur, architecto quam
-          nesciunt, dolor veritatis nisi minus inventore, rerum at recusandae?
-        </p>
-      );
-      const Long = () => (
-        <>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa veniam
-            dicta beatae eos ex error culpa delectus rem tenetur, architecto
-            quam nesciunt, dolor veritatis nisi minus inventore, rerum at
-            recusandae?
-          </p>
-
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nam
-            sapiente nobis ea veritatis error consequatur nisi exercitationem
-            iure laudantium culpa, animi temporibus non! Maxime et quisquam
-            amet. A, deserunt!
-          </p>
-
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nam
-            sapiente nobis ea veritatis error consequatur nisi exercitationem
-            iure laudantium culpa, animi temporibus non! Maxime et quisquam
-            amet. A, deserunt!
-          </p>
-
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nam
-            sapiente nobis ea veritatis error consequatur nisi exercitationem
-            iure laudantium culpa, animi temporibus non! Maxime et quisquam
-            amet. A, deserunt!
-          </p>
-        </>
-      );
-      return (
-        <details class="group relative text-justify">
-          <summary class="block">
-            <div class="group-open:hidden pb-1">
-              <Short />
-            </div>
-
-            <div class="text-sm font-medium underline cursor-pointer group-open:absolute group-open:bottom-0 group-open:left-0">
-              <span className="block group-open:hidden">Olvass Többet</span>
-              <span className="hidden group-open:block">Bezárás</span>
-            </div>
-          </summary>
-
-          <div class="pb-6">
-            <Long />
-          </div>
-        </details>
-      );
-    };
-    const Form = () => {
-      const Fieldset = ({ title, children }) => {
-        return (
-          <fieldset>
-            <legend class="mb-1 text-sm font-medium">{title}</legend>
-
-            <div class="flow-root">
-              <div class="-m-0.5 flex flex-wrap">{children}</div>
-            </div>
-          </fieldset>
-        );
-      };
-      const Input = ({ title, ...args }) => {
-        const random = Math.random().toString(36).slice(2, 7);
-        return (
-          <label for={random} class="cursor-pointer p-0.5">
-            <input type="radio" {...args} id={random} class="sr-only peer" />
-
-            <span class="inline-block px-3 py-1 text-xs font-medium border rounded-full group peer-checked:bg-black peer-checked:text-white">
-              {title}
-            </span>
-          </label>
-        );
-      };
-
-      //   useEffect(() => {}, [type, search]) setResult
-
-      const spotify = () => {
-        let redirect = process.env.NEXT_PUBLIC_SPOTYFY_AUTH_ENDPOINT;
-        redirect += `?client_id=${process.env.NEXT_PUBLIC_SPOTYFY_CLIENT_ID}`;
-        redirect += `&redirect_uri=${location.origin}/product`;
-        redirect += `&response_type=${process.env.NEXT_PUBLIC_SPOTYFY_RESPONSE_TYPE}`;
-        return redirect;
-      };
-
-      const handleChange = (e) => {
-        const { name, value } = e.target;
-        if (name === "platform") {
-          if (value === "spotify") {
-            router.push(spotify());
-            // if not valid token
-            console.log("OAuth");
-            // else OK
+  return (
+    <div className="flex flex-col md:flex-row">
+      <div className="md:fixed md:top-0 md:left-0 w-screen md:w-1/2 h-1/2 md:h-screen grid place-items-center px-12 pt-12 md:pb-12">
+        <img
+          alt="Product Image"
+          src={
+            formData.results?.find((result) => result.url === formData.result)
+              ?.image || "https://via.placeholder.com/640"
           }
-        } else if (name === "type") {
-          // set type
-        } else if (name === "search") {
-          // set search
-        } else if (name === "result") {
-        }
-        // e.preventDefault();
-        console.log(e.target.name);
-        console.log(e.target.value);
-      };
-      return (
-        <form className="flex flex-col gap-6" onChange={(e) => handleChange(e)}>
-          <Fieldset title="Platform">
-            <Input title="Spotify" name="platform" value="spotify" />
-            <Input title="Apple Music" name="platform" value="apple" onClick={() => dispatch({type: "APPLE", token: "KORTE", expiration: 420})} />
-            <Input title="Soundcloud" name="platform" value="soundcloud" onClick={() => dispatch({type: "SPOTIFY", token: "ALMA", expiration: 123})} />
-          </Fieldset>
-          <Fieldset title="Keresés típúsa">
-            <Input title="Zeneszám" name="type" />
-            <Input title="Playlist" name="type" />
-            <Input title="Album" name="type" />
-            <Input title="Előadó" name="type" />
-          </Fieldset>
-          <Fieldset>
+          className="object-cover w-[25vh] md:w-[25vw] aspect-square rounded-xl shadow-xl"
+        />
+      </div>
+      <div className="md:absolute md:top-0 md:right-0 w-screen md:w-1/2 md:min-h-screen px-12 !!!!!!!!!!!!!!! border-l !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!">
+        <div className="md:min-h-screen flex flex-col justify-center gap-6 py-12">
+          <div className="flex justify-between">
+            <div>
+              <h1 className="text-2xl font-bold">Lamina Falkép</h1>
+
+              <p className="mt-0.5 text-sm">Beépített NFC csippel.</p>
+            </div>
+
+            <p className="text-2xl font-bold">{price()} Ft</p>
+          </div>
+          <details className="group relative text-justify  [&_summary::-webkit-details-marker]:hidden">
+            <summary className="block">
+              <div className="group-open:hidden pb-1 prose-p">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
+                  veniam dicta beatae eos ex error culpa delectus rem tenetur,
+                  architecto quam nesciunt, dolor veritatis nisi minus
+                  inventore, rerum at recusandae?
+                </p>
+              </div>
+
+              <div className="text-sm font-medium underline cursor-pointer group-open:absolute group-open:bottom-0 group-open:left-0">
+                <span className="block group-open:hidden">Olvass Többet</span>
+                <span className="hidden group-open:block">Bezárás</span>
+              </div>
+            </summary>
+
+            <div className="pb-6 prose-p:">
+              <>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
+                  veniam dicta beatae eos ex error culpa delectus rem tenetur,
+                  architecto quam nesciunt, dolor veritatis nisi minus
+                  inventore, rerum at recusandae?
+                </p>
+
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Placeat nam sapiente nobis ea veritatis error consequatur nisi
+                  exercitationem iure laudantium culpa, animi temporibus non!
+                  Maxime et quisquam amet. A, deserunt!
+                </p>
+
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Placeat nam sapiente nobis ea veritatis error consequatur nisi
+                  exercitationem iure laudantium culpa, animi temporibus non!
+                  Maxime et quisquam amet. A, deserunt!
+                </p>
+
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Placeat nam sapiente nobis ea veritatis error consequatur nisi
+                  exercitationem iure laudantium culpa, animi temporibus non!
+                  Maxime et quisquam amet. A, deserunt!
+                </p>
+              </>
+            </div>
+          </details>
+          <form
+            className="flex flex-col gap-6"
+            onChange={(e) => handleChange(e)}
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            <Fieldset title="Platform">
+              <Input title="Spotify" name="platform" value="spotify" />
+              {/* <Input title="Apple Music" name="platform" value="apple" /> */}
+              {/* <Input title="Soundcloud" name="platform" value="soundcloud" /> */}
+            </Fieldset>
+            <Fieldset title="Keresés típúsa">
+              <Input title="Zeneszám" name="type" value="track" />
+              <Input title="Playlist" name="type" value="playlist" />
+              <Input title="Album" name="type" value="album" />
+              <Input title="Előadó" name="type" value="artist" />
+            </Fieldset>
             <input
               type="text"
               name="search"
-              id="search"
               className="w-full first-letter:inline-block px-4 text-center py-2 text-xs font-medium border border-brand-900 rounded-full outline-none"
-              placeholder="Keress valamit .."
-              onChange={(e) => {}}
+              placeholder={
+                formData.search ? formData.search : "Keress valamit .."
+              }
             />
-          </Fieldset>
-          <Fieldset title="Keresés eredményei">
-            <Input title="Kanye West - Heartless" name="results" />
-            <Input title="Kanye West - All Mine" name="results" />
-            <Input title="Steve Lacy - Dark Red" name="results" />
-            <Input title="Drake - Can I" name="results" />
-            <Input title="Kid Cudi - Day 'n' Nite" name="results" />
-            <Input title="JAY-Z - Otis" name="results" />
-            <Input title="Dr. Dog - Where'd All the Time Go?" name="results" />
-          </Fieldset>
-          <Fieldset title="Méret">
-            <Input title="Kicsi (20x20)" name="size" />
-            <Input title="Médium (25x25)" name="size" />
-            <Input title="Nagy (30x30)" name="size" />
-          </Fieldset>
-          <Fieldset title="Mennyiség">
-            <Input title="1 DB" name="quantity" />
-            <Input title="2 DB" name="quantity" />
-            <Input title="5 DB" name="quantity" />
-          </Fieldset>
-          <Fieldset title="Anyag">
-            <Input title="Papír - Habkarton (5mm)" name="material" />
-            <Input title="Habosított Műanyag (5mm)" name="material" />
-          </Fieldset>
+            <Fieldset title="Keresés eredményei">
+              {formData.results?.map(({ name, artists, url }) => (
+                <Input
+                  key={url}
+                  title={`${name} ${artists ? ` - ${artists}` : ""}`}
+                  name="result"
+                  value={url}
+                />
+              ))}
+            </Fieldset>
+            <Fieldset title="Méret">
+              <Input title="Kicsi (20x20)" name="size" value="small" />
+              <Input title="Médium (25x25)" name="size" value="medium" />
+              <Input title="Nagy (30x30)" name="size" value="big" />
+            </Fieldset>
+            <Fieldset title="Funkció">
+              <Input title="Normál" name="function" value="normal" />
+              <Input
+                title="Lejátszható - Beépített NFC Csippel"
+                name="function"
+                value="smart"
+              />
+            </Fieldset>
+            <Fieldset title="Mennyiség">
+              <Input title="1 DB" name="quantity" value={1} />
+              <Input title="2 DB" name="quantity" value={2} />
+              <Input title="5 DB" name="quantity" value={5} />
+            </Fieldset>
+            <Fieldset title="Anyag">
+              <Input
+                title="Papír - Habkarton (5mm)"
+                name="material"
+                value="paper"
+              />
+              <Input
+                title="Habosított Műanyag (5mm)"
+                name="material"
+                value="carbonate"
+              />
+            </Fieldset>
 
-          <div class="flex">
             <button
               type="submit"
-              class="w-full block px-4 py-2 font-medium text-xs text-white bg-brand-900 rounded-full hover:bg-brand-800"
+              className="w-full block px-4 py-2 font-medium text-xs text-white bg-brand-900 rounded-full hover:bg-brand-800"
             >
               Kosárhoz adás
             </button>
-          </div>
-        </form>
-      );
-    };
-    return (
-      <div className="w-full max-w-screen-sm md:w-[50vw] md:h-screen px-12 !!!!!!!!!!!!!!! border-l !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!">
-        <div className="md:min-h-screen flex flex-col justify-center gap-6 py-12">
-          <TitleSubtitlePrice />
-          <Details />
-          <Form />
+          </form>
+          <button
+            onClick={handleCheckout}
+            className="w-full block px-4 py-2 font-medium text-xs text-white bg-brand-900 rounded-full hover:bg-brand-800"
+          >
+            Fizetés
+          </button>
         </div>
       </div>
-    );
-  };
-  return (
-    <div className="w-full h-screen flex flex-col md:flex-row">
-      <Left />
-      <Right />
+      <Cart enabledx/>
     </div>
   );
 };

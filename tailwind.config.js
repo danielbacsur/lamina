@@ -12,6 +12,18 @@ module.exports = {
       minHeight: {
         screen: "calc(var(--vh))",
       },
+      maxHeight: {
+        screen: "calc(var(--vh))",
+      },
+      width: {
+        screen: "calc(var(--vw))",
+      },
+      minWidth: {
+        screen: "calc(var(--vw))",
+      },
+      maxWidth: {
+        screen: "calc(var(--vw))",
+      },
       fontFamily: {
         playfair: ["Playfair Display", "serif"],
         // cormorant: ["Cormorant Garamond", "serif"],
@@ -32,5 +44,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: []
 };

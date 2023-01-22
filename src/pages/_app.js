@@ -1,26 +1,31 @@
 import CartProvider from "context/cart";
-import PlatformProvider from "context/platform";
+import FormProvider from "context/form";
 import { useEffect } from "react";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    const setter = () =>
+    const setter = () => {
       document.documentElement.style.setProperty(
         "--vh",
         `${window.innerHeight}px`
       );
-    window.addEventListener("resize", setter);
+      document.documentElement.style.setProperty(
+        "--vw",
+        `${document.body.offsetWidth - 1}px`
+      );
+    };
     setter();
+    window.addEventListener("resize", setter);
     return () => window.removeEventListener("resize", setter);
   }, []);
 
   return (
-    <PlatformProvider>
+    <FormProvider>
       <CartProvider>
         <Component {...pageProps} />
       </CartProvider>
-    </PlatformProvider>
+    </FormProvider>
   );
 }
 
