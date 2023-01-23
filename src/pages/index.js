@@ -224,38 +224,47 @@ const Three = () => {
         />
       </Canvas>
     </div>
+    
   );
 };
-const Covers = ({ count = 96, rand = MathUtils.randFloatSpread }) => {
-  const positions = Array.from({ length: count }, (_, i) => [
-    rand(32),
-    16 + i / 2,
-    rand(32),
-  ]);
-  const rotations = Array.from({ length: count }, () => [
-    Math.random(),
-    Math.random(),
-    Math.random(),
-  ]);
-  // const coverIndex = Math.floor(Math.random() * 10);
-  const colorMap = useLoader(TextureLoader, `covers/2.jpg`);
-  return (
-    <InstancedRigidBodies
-      positions={positions}
-      rotations={rotations}
-      colliders="hull"
-    >
-      <instancedMesh
-        receiveShadow
-        castShadow
-        args={[undefined, undefined, count]}
-        dispose={null}
+const Covers = () => {
+  const rand = MathUtils.randFloatSpread;
+  const InstancedCovers = ({ image, count = 4 }) => {
+    const positions = Array.from({ length: count }, (_, i) => [
+      rand(32),
+      16 + i / 2,
+      rand(32),
+    ]);
+    const rotations = Array.from({ length: count }, () => [
+      Math.random(),
+      Math.random(),
+      Math.random(),
+    ]);
+    const colorMap = useLoader(TextureLoader, image);
+
+    return (
+      <InstancedRigidBodies
+        positions={positions}
+        rotations={rotations}
+        colliders="hull"
       >
-        <boxBufferGeometry args={[1, 0.025, 1]} />
-        {/* <meshPhongMaterial color="#b0b91a" attach="material" /> */}
-        <meshStandardMaterial map={colorMap} />
-      </instancedMesh>
-    </InstancedRigidBodies>
+        <instancedMesh
+          receiveShadow
+          castShadow
+          args={[undefined, undefined, count]}
+          dispose={null}
+        >
+          <boxBufferGeometry args={[1, 0.025, 1]} />
+          {/* <meshPhongMaterial color="#b0b91a" attach="material" /> */}
+          <meshStandardMaterial map={colorMap} />
+        </instancedMesh>
+      </InstancedRigidBodies>
+    );
+  };
+  return (
+    <group>
+      {[...Array(10)].map((_, i) => <InstancedCovers image={`covers/${i}.jpg`} />)}
+    </group>
   );
 };
 
