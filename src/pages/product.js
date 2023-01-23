@@ -1,13 +1,13 @@
 import axios from "axios";
 import Cart from "components/Cart";
-import { useCart } from "context/cart";
+// import { useCart } from "context/cart";
 import { useForm } from "context/form";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const Product = () => {
   const { formData, dispatch: formDataDispatch } = useForm();
-  const { items, dispatch: cartDispatch } = useCart();
+  // const { items, dispatch: cartDispatch } = useCart();
   const [platforms, setPlatforms] = useState({});
   const setPlatform = (platform) => {
     setPlatforms({ ...platforms, ...platform });
@@ -73,13 +73,13 @@ const Product = () => {
     router.push(data);
     // cartDispatch({ type: "APPEND", item: rest });
   };
-  const handleCheckout = async () => {
-    console.log(items);
-    const { data } = await axios.post("/api/checkout", {
-      items,
-    });
-    router.push(data);
-  };
+  // const handleCheckout = async () => {
+  //   console.log(items);
+  //   const { data } = await axios.post("/api/checkout", {
+  //     items,
+  //   });
+  //   router.push(data);
+  // };
 
   useEffect(() => {
     if (!formData.platform) return;
@@ -120,7 +120,7 @@ const Product = () => {
     setPrices({
       size: { small: -250, medium: 0, big: 250 }[s],
       function: { normal: -250, smart: 0 }[f],
-      quantity: { 1: 4000, 2: 3500, 5: 3000 }[q],
+      quantity: { 1: 4000, 2: 3500, 5: 3000 }[q] * q,
       material: { paper: -250, carbonate: 0 }[m],
     });
   }, [formData.size, formData.function, formData.quantity, formData.material]);
@@ -181,14 +181,14 @@ const Product = () => {
       </div>
       <div className="md:absolute md:top-0 md:right-0 w-screen md:w-[50vw] md:min-h-screen px-12 !!!!!!!!!!!!!!! border-l !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!">
         <div className="md:min-h-screen flex flex-col justify-center gap-6 py-12">
-          <div className="flex justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">Lamina Borítókép</h1>
+          <div>
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold">Lamina</h1>
 
-              <p className="mt-0.5 text-sm">Beépített NFC csippel.</p>
+              <p className="text-2xl font-bold">{price()} Ft</p>
             </div>
 
-            <p className="text-2xl font-bold">{price()} Ft / kép</p>
+            <p className="mt-0.5 text-sm">Keress rá kedvenc számaidra!</p>
           </div>
           <details className="group relative text-justify  [&_summary::-webkit-details-marker]:hidden">
             <summary className="block">
