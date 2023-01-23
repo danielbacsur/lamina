@@ -232,7 +232,7 @@ const Covers = () => {
     const scale = [1, 0.025, 1];
     const positions = Array.from({ length: count }, (_, i) => [
       rand(32),
-      scale[1],
+      scale[1]/2,
       rand(32),
     ]);
     const rotations = Array.from({ length: count }, () => [
