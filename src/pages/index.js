@@ -239,7 +239,6 @@ const Covers = () => {
       0,
       2 + Math.random(),
       0,
-      // Math.random(),
     ]);
     const colorMap = useLoader(TextureLoader, image);
 

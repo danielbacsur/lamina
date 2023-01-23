@@ -1,4 +1,4 @@
-import CartProvider from "context/cart";
+// import CartProvider from "context/cart";
 import FormProvider from "context/form";
 import { useEffect } from "react";
 import "../styles/globals.css";
@@ -22,9 +22,9 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <FormProvider>
-      <CartProvider>
+      {/* <CartProvider> */}
         <Component {...pageProps} />
-      </CartProvider>
+      {/* </CartProvider> */}
     </FormProvider>
   );
 }
