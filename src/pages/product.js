@@ -120,7 +120,7 @@ const Product = () => {
     setPrices({
       size: { small: -250, medium: 0, big: 250 }[s],
       function: { normal: -250, smart: 0 }[f],
-      quantity: { 1: 4000, 2: 3500, 5: 3000 }[q] * q,
+      quantity: { 1: 4000, 2: 3500, 5: 3000 }[q],
       material: { paper: -250, carbonate: 0 }[m],
     });
   }, [formData.size, formData.function, formData.quantity, formData.material]);
@@ -185,7 +185,7 @@ const Product = () => {
             <div className="flex justify-between">
               <h1 className="text-2xl font-bold">Lamina</h1>
 
-              <p className="text-2xl font-bold">{price()} Ft</p>
+              <p className="text-2xl font-bold">{price()*formData.quantity} Ft</p>
             </div>
 
             <p className="mt-0.5 text-sm">Keress rá kedvenc számaidra!</p>
