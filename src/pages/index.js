@@ -44,7 +44,7 @@ const Content = () => {
       </a>
     );
     return (
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+      <div className="sm:absolute mt-[25%] sm:mt-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 text-center">
         <Title />
         <Subtitle />
         <Button />
@@ -142,14 +142,14 @@ const Content = () => {
       );
     };
     return (
-      <div className="absolute bottom-12 left-12 right-12 sm:flex sm:items-center sm:justify-between">
+      <div className="sm:absolute sm:bottom-12 sm:left-12 sm:right-12 sm:flex sm:items-center sm:justify-between">
         <Legal />
         <Socials />
       </div>
     );
   };
   return (
-    <div className="pointer-events-none">
+    <div className="pointer-events-none p-12 w-screen h-screen flex flex-col justify-between">
       <Hero />
       <Footer />
     </div>
