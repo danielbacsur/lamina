@@ -155,6 +155,17 @@ const Product = () => {
       </label>
     );
   };
+  const Button = ({ text, type, onClick }) => {
+    return (
+      <button
+        type={type}
+        className="w-full block px-4 py-2 font-medium text-xs text-white bg-brand-900 rounded-full hover:bg-brand-800"
+        onClick={onClick}
+      >
+        {text}
+      </button>
+    );
+  };
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -293,12 +304,7 @@ const Product = () => {
               />
             </Fieldset>
 
-            <button
-              type="submit"
-              className="w-full block px-4 py-2 font-medium text-xs text-white bg-brand-900 rounded-full hover:bg-brand-800"
-            >
-              Véglegesítés
-            </button>
+            <Button text="Véglegesítés" type="submit" />
           </form>
         </div>
       </div>
