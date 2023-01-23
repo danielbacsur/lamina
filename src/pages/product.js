@@ -156,7 +156,7 @@ const Product = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="md:fixed md:top-0 md:left-0 w-screen md:w-1/2 h-1/2 md:h-screen grid place-items-center px-12 pt-12 md:pb-12">
+      <div className="md:fixed md:top-0 md:left-0 w-screen md:w-[50vw] h-[50vh] md:h-screen grid place-items-center px-12 pt-12 md:pb-12">
         <img
           alt="Product Image"
           src={
@@ -166,7 +166,7 @@ const Product = () => {
           className="object-cover w-[25vh] md:w-[25vw] aspect-square rounded-xl shadow-xl"
         />
       </div>
-      <div className="md:absolute md:top-0 md:right-0 w-screen md:w-1/2 md:min-h-screen px-12 !!!!!!!!!!!!!!! border-l !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!">
+      <div className="md:absolute md:top-0 md:right-0 w-screen md:w-[50vw] md:min-h-screen px-12 !!!!!!!!!!!!!!! border-l !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!">
         <div className="md:min-h-screen flex flex-col justify-center gap-6 py-12">
           <div className="flex justify-between">
             <div>
