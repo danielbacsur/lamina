@@ -59,17 +59,19 @@ const Product = () => {
     const { name, value } = e.target;
     formDataDispatch({ type: "ASSIGN", key: name, value });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     const { search, result, results, ...rest } = {
       ...formData,
       ...formData.results.find((result) => result.url === formData.result),
       price: price(),
     };
     console.log(rest);
-
-    cartDispatch({ type: "APPEND", item: rest });
+    const { data } = await axios.post("/api/checkout", {
+      items: [rest],
+    });
+    router.push(data);
+    // cartDispatch({ type: "APPEND", item: rest });
   };
   const handleCheckout = async () => {
     console.log(items);
@@ -170,12 +172,12 @@ const Product = () => {
         <div className="md:min-h-screen flex flex-col justify-center gap-6 py-12">
           <div className="flex justify-between">
             <div>
-              <h1 className="text-2xl font-bold">Lamina Falkép</h1>
+              <h1 className="text-2xl font-bold">Lamina Borítókép</h1>
 
               <p className="mt-0.5 text-sm">Beépített NFC csippel.</p>
             </div>
 
-            <p className="text-2xl font-bold">{price()} Ft</p>
+            <p className="text-2xl font-bold">{price()} Ft / kép</p>
           </div>
           <details className="group relative text-justify  [&_summary::-webkit-details-marker]:hidden">
             <summary className="block">
@@ -295,18 +297,11 @@ const Product = () => {
               type="submit"
               className="w-full block px-4 py-2 font-medium text-xs text-white bg-brand-900 rounded-full hover:bg-brand-800"
             >
-              Kosárhoz adás
+              Véglegesítés
             </button>
           </form>
-          <button
-            onClick={handleCheckout}
-            className="w-full block px-4 py-2 font-medium text-xs text-white bg-brand-900 rounded-full hover:bg-brand-800"
-          >
-            Fizetés
-          </button>
         </div>
       </div>
-      <Cart enabledx/>
     </div>
   );
 };

@@ -12,9 +12,9 @@ const Checkout = async (req, res) => {
       product_data: {
         name: item.name,
         images: [item.image],
-        description: `${capitalize(item.type)}${
-          item.artists ? ` by ${item.artists}` : ""
-        }`,
+        // description: `${capitalize(item.type)}${
+        //   item.artists ? ` by ${item.artists}` : ""
+        // }`,
         metadata: {
           ...item,
         },
