@@ -224,21 +224,22 @@ const Three = () => {
         />
       </Canvas>
     </div>
-    
   );
 };
 const Covers = () => {
   const rand = MathUtils.randFloatSpread;
   const InstancedCovers = ({ image, count = 4 }) => {
+    const scale = [1, 0.025, 1];
     const positions = Array.from({ length: count }, (_, i) => [
       rand(32),
-      16 + i / 2,
+      scale[1],
       rand(32),
     ]);
     const rotations = Array.from({ length: count }, () => [
-      Math.random(),
-      Math.random(),
-      Math.random(),
+      0,
+      2 + Math.random(),
+      0,
+      // Math.random(),
     ]);
     const colorMap = useLoader(TextureLoader, image);
 
@@ -254,7 +255,7 @@ const Covers = () => {
           args={[undefined, undefined, count]}
           dispose={null}
         >
-          <boxBufferGeometry args={[1, 0.025, 1]} />
+          <boxBufferGeometry args={scale} />
           {/* <meshPhongMaterial color="#b0b91a" attach="material" /> */}
           <meshStandardMaterial map={colorMap} />
         </instancedMesh>
@@ -263,7 +264,9 @@ const Covers = () => {
   };
   return (
     <group>
-      {[...Array(10)].map((_, i) => <InstancedCovers image={`covers/${i}.jpg`} />)}
+      {[...Array(10)].map((_, i) => (
+        <InstancedCovers image={`covers/${i}.jpg`} />
+      ))}
     </group>
   );
 };
